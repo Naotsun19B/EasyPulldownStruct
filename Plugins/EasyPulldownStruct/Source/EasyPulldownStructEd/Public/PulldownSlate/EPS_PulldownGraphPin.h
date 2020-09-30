@@ -2,12 +2,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "SlateBasics.h"
 #include "SGraphPin.h"
-#include "EdGraph/EdGraphPin.h"
-#include "EdGraph/EdGraphSchema.h"
-#include "EdGraphSchema_K2.h"
-#include "EdGraphUtilities.h"
 
 /**
  * Slate in the graph pin pull-down menu on the Blueprint Editor.
@@ -34,14 +29,4 @@ public:
 protected:
 	// Called when the value is changed in the pull-down menu.
 	virtual void OnValueChanged(TSharedPtr<FString> ItemSelected, ESelectInfo::Type SelectInfo);
-};
-
-/**
- * A factory class that registers a custom graph pin that displays a pull-down menu.
- */
-class EASYPULLDOWNSTRUCTED_API FEPS_PulldownGraphPinFactory : public FGraphPanelPinFactory
-{
-	// FGraphPanelPinFactory interface.
-	virtual TSharedPtr<SGraphPin> CreatePin(UEdGraphPin* InPin) const override;
-	// End of FGraphPanelPinFactory interface.
 };

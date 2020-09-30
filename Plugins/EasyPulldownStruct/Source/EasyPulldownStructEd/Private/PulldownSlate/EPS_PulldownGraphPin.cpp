@@ -5,8 +5,7 @@
 #include "Kismet2/KismetEditorUtilities.h"
 #include "Widgets/Input/STextComboBox.h"
 
-/////////////////////////////////////////////////////
-// SEPS_PulldownGraphPin.
+DEFINE_LOG_CATEGORY(LogEasyPulldownStruct);
 
 void SEPS_PulldownGraphPin::Construct(const FArguments& InArgs, UEdGraphPin* InGraphPinObj)
 {
@@ -71,8 +70,8 @@ TSharedRef<SWidget>	SEPS_PulldownGraphPin::GetDefaultValueWidget()
 		[
 			SNew(STextComboBox)
 			.OptionsSource(&DisplayStrings)
-		.OnSelectionChanged(this, &SEPS_PulldownGraphPin::OnValueChanged)
-		.InitiallySelectedItem(DisplayStrings[Index])
+			.OnSelectionChanged(this, &SEPS_PulldownGraphPin::OnValueChanged)
+			.InitiallySelectedItem(DisplayStrings[Index])
 		];
 }
 
@@ -91,20 +90,4 @@ void SEPS_PulldownGraphPin::OnValueChanged(TSharedPtr<FString> ItemSelected, ESe
 			UE_LOG(LogEasyPulldownStruct, Error, TEXT("The string \"%s\" was not found in the list."), *(*ItemSelected));
 		}
 	}
-}
-
-/////////////////////////////////////////////////////
-// FEPS_PulldownGraphPinFactory.
-
-TSharedPtr<SGraphPin> FEPS_PulldownGraphPinFactory::CreatePin(UEdGraphPin* InPin) const
-{
-	if (InPin->PinType.PinCategory == UEdGraphSchema_K2::PC_Struct)
-	{
-		//if (InPin->PinType.PinSubCategoryObject == FEPS_PulldownStructBase::StaticStruct())
-		//{
-		//	return SNew(SGraphPin, InPin);
-		//}
-	}
-
-	return nullptr;
 }

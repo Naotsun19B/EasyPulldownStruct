@@ -4,4 +4,4 @@
 
 #include "BaseStruct/EPS_PulldownStruct.h"
 
-DEFINE_LOG_CATEGORY_STATIC(LogEasyPulldownStruct, Log, All);
+EASYPULLDOWNSTRUCTED_API DECLARE_LOG_CATEGORY_EXTERN(LogEasyPulldownStruct, Log, All);
