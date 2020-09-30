@@ -50,7 +50,9 @@ public:
 		return Key;
 	}
 
+#if WITH_EDITOR
 	// Get the items to be displayed in the pull-down menu.
 	// Build a list from data tables, arrays, etc. at the inheritance destination.
 	virtual void GetDisplayStrings(TArray<TSharedPtr<FString>>& DisplayStrings) const {}
+#endif
 };

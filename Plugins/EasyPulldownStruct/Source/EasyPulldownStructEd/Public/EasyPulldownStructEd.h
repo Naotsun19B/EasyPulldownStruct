@@ -12,11 +12,6 @@ MONOLITHIC_HEADER_BOILERPLATE()
 *****************************************************************************/
 
 
-
 /* Public includes.
 *****************************************************************************/
-
-
-/* Log Category.
-*****************************************************************************/
-DEFINE_LOG_CATEGORY_STATIC(LogEasyPulldownStruct, Log, All);
+#include "EPS_EditorGlobal.h"
