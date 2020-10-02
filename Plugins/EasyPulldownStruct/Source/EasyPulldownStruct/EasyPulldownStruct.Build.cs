@@ -26,5 +26,17 @@ public class EasyPulldownStruct : ModuleRules
 				// ... add private dependencies that you statically link with here ...	
 			}
             );
-	}
+
+        if (Target.Type == TargetRules.TargetType.Editor)
+        {
+            PrivateDependencyModuleNames.AddRange(
+            new string[]
+            {
+                "PropertyEditor",
+                "EasyPulldownStructEd",
+				// ... add private dependencies that you statically link with here ...	
+			}
+            );
+        }
+    }
 }

@@ -17,7 +17,10 @@ protected:
 	FName Key;
 
 public:
-	SLATE_BEGIN_ARGS(SEPS_PulldownGraphPin) {}
+	SLATE_BEGIN_ARGS(SEPS_PulldownGraphPin) 
+		: _InDisplayStrings()
+	{}
+		SLATE_ARGUMENT(TArray<TSharedPtr<FString>>, InDisplayStrings)
 	SLATE_END_ARGS()
 
 	void Construct(const FArguments& InArgs, UEdGraphPin* InGraphPinObj);

@@ -15,7 +15,6 @@ public class EasyPulldownStructEd : ModuleRules
                 "CoreUObject",
                 "Engine",
                 "InputCore",
-                "EasyPulldownStruct"
             }
 			);
 			
@@ -24,9 +23,12 @@ public class EasyPulldownStructEd : ModuleRules
 			{
                 "Slate",
                 "SlateCore",
-                "GraphEditor",
                 "UnrealEd",
-                "BlueprintGraph"
+                "GraphEditor",
+                "PropertyEditor",
+                "BlueprintGraph",
+
+                //"EasyPulldownStruct",
             }
 			);
 	}

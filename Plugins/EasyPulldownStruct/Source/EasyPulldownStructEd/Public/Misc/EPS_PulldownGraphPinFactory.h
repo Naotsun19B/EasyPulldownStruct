@@ -12,7 +12,15 @@ class UEdGraphPin;
  */
 class EASYPULLDOWNSTRUCTED_API FEPS_PulldownGraphPinFactory : public FGraphPanelPinFactory
 {
+public:
+	// Register FEPS_PulldownGraphPinFactory in the list of GraphPinFactory.
+	static void RegisterPulldownGraphPinFactory();
+
 	// FGraphPanelPinFactory interface.
 	virtual TSharedPtr<SGraphPin> CreatePin(UEdGraphPin* InPin) const override;
 	// End of FGraphPanelPinFactory interface.
+
+private:
+	// Recursive function that determines if a struct inherits from FEPS_PulldownStructBase.
+	bool IsInheritPulldownStructBase(UStruct* InStruct) const;
 };

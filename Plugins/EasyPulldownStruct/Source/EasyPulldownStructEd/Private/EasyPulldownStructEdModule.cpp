@@ -3,6 +3,10 @@
 #include "CoreMinimal.h"
 #include "Modules/ModuleInterface.h"
 #include "Modules/ModuleManager.h"
+#include "EPS_EditorGlobals.h"
+#include "Misc/EPS_PulldownGraphPinFactory.h"
+
+DEFINE_LOG_CATEGORY(LogEasyPulldownStruct);
 
 class FEasyPulldownStructModuleEd : public IModuleInterface
 {
@@ -15,12 +19,12 @@ public:
 
 void FEasyPulldownStructModuleEd::StartupModule()
 {
-
+	FEPS_PulldownGraphPinFactory::RegisterPulldownGraphPinFactory();
 }
 
 void FEasyPulldownStructModuleEd::ShutdownModule()
 {
-
+	
 }
 
 IMPLEMENT_MODULE(FEasyPulldownStructModuleEd, EasyPulldownStructEd)

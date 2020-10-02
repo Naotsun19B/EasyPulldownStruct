@@ -5,11 +5,12 @@
 #include "Kismet2/KismetEditorUtilities.h"
 #include "Widgets/Input/STextComboBox.h"
 
-DEFINE_LOG_CATEGORY(LogEasyPulldownStruct);
-
 void SEPS_PulldownGraphPin::Construct(const FArguments& InArgs, UEdGraphPin* InGraphPinObj)
 {
 	SGraphPin::Construct(SGraphPin::FArguments(), InGraphPinObj);
+
+	//DisplayStrings.Add(MakeShareable(new FString(FName(NAME_None).ToString())));
+	DisplayStrings.Append(InArgs._InDisplayStrings);
 }
 
 TSharedRef<SWidget>	SEPS_PulldownGraphPin::GetDefaultValueWidget()
