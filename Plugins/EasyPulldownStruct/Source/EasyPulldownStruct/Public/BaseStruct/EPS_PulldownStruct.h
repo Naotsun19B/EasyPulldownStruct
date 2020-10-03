@@ -3,11 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
-#if WITH_EDITOR
-#include "EPS_EditorGlobals.h"
-#endif
-
 #include "EPS_PulldownStruct.generated.h"
 
 /**
@@ -60,6 +55,11 @@ public:
 	{
 		return Key;
 	}
+
+protected:
+#if WITH_EDITOR
+	void RegisterPulldownStruct(const FString& StructName, const TArray<TSharedPtr<FString>>& DisplayStrings);
+#endif
 };
 
 /**
@@ -68,52 +68,8 @@ public:
  */
 #if WITH_EDITOR
 #define REGISTER_PULLDOWN_STRUCT() \
-	UEPS_DisplayStringsContainer::Get()->RegisterDisplayStrings(StaticStruct()->GetName(), GetDisplayStrings()); \
+	RegisterPulldownStruct(StaticStruct()->GetName(), GetDisplayStrings()); \
 	static_cast<FEPS_PulldownStructBase*>(this); // Prevents use in structures that do not inherit from FEPS_PulldownStructBase.
 #else
 #define REGISTER_PULLDOWN_STRUCT()
 #endif
-
-USTRUCT(BlueprintType)
-struct EASYPULLDOWNSTRUCT_API FTestStruct : public FEPS_PulldownStructBase
-{
-	GENERATED_BODY()
-
-public:
-	FTestStruct()
-	{
-		REGISTER_PULLDOWN_STRUCT();
-	}
-
-	virtual TArray<TSharedPtr<FString>> GetDisplayStrings() const override 
-	{
-		return TArray<TSharedPtr<FString>> 
-		{
-			MakeShareable(new FString(TEXT("ItemA"))),
-			MakeShareable(new FString(TEXT("ItemB"))),
-			MakeShareable(new FString(TEXT("ItemC")))
-		};
-	}
-};
-
-USTRUCT(BlueprintType)
-struct EASYPULLDOWNSTRUCT_API FTestStruct2 : public FEPS_PulldownStructBase
-{
-	GENERATED_BODY()
-
-public:
-	FTestStruct2()
-	{
-		REGISTER_PULLDOWN_STRUCT();
-	}
-
-	virtual TArray<TSharedPtr<FString>> GetDisplayStrings() const override
-	{
-		return TArray<TSharedPtr<FString>>
-		{
-			MakeShareable(new FString(TEXT("Hoge"))),
-			MakeShareable(new FString(TEXT("Fuga"))),
-			MakeShareable(new FString(TEXT("Piyo")))
-		};
-	}
-};

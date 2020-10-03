@@ -46,7 +46,9 @@ bool UEPS_DisplayStringsContainer::RegisterDisplayStrings(const FString& StructN
 		PropertyModule.RegisterCustomPropertyTypeLayout(FName(StructName), FOnGetPropertyTypeCustomizationInstance::CreateLambda([StructName]() -> TSharedRef<IPropertyTypeCustomization> 
 		{ 
 				TArray<TSharedPtr<FString>> DisplayStrings; 
-				UEPS_DisplayStringsContainer::Get()->GetDisplayStrings(StructName, DisplayStrings); 
+				auto Container = UEPS_DisplayStringsContainer::Get();
+				check(Container);
+				Container->GetDisplayStrings(StructName, DisplayStrings);
 				return IEPS_PulldownDetail::MakeInstance(DisplayStrings); 
 		})); 
 
