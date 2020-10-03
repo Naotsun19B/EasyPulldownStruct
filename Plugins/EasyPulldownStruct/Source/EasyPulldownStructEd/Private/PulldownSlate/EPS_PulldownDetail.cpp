@@ -62,6 +62,7 @@ void IEPS_PulldownDetail::CustomizeHeader(TSharedRef<IPropertyHandle> InStructPr
 		UE_LOG(LogEasyPulldownStruct, Error, TEXT("The string \"%s\" was not found in the list."), *Key.ToString());
 	}
 
+	// Create a Slate that composes the pull-down menu.
 	HeaderRow
 		.NameContent()
 		[
@@ -92,6 +93,7 @@ void IEPS_PulldownDetail::OnStateValueChanged(TSharedPtr<FString> ItemSelected, 
 	{
 		if (DisplayStrings.Contains(ItemSelected))
 		{
+			// Apply the string of the selected item to the value of the variable.
 			KeyHandle->SetValue(FName(**ItemSelected));
 		}
 	}

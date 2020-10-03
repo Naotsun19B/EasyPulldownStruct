@@ -14,17 +14,19 @@ class STextComboBox;
 enum class ECheckBoxState : uint8;
 
 /**
- * プルダウンメニューのカスタム詳細設定の基底クラス.
+ * Custom detail class for pull-down menu structs.
  */
 class EASYPULLDOWNSTRUCTED_API IEPS_PulldownDetail : public IPropertyTypeCustomization
 {
 private:
+	// Classes used for Slate to build pull-down menu.
 	TSharedPtr<IPropertyHandle> StructPropertyHandle;
 	TSharedPtr<IPropertyHandle> KeyHandle;
 	TSharedPtr<STextComboBox> KeyComboBox;
 	TSharedPtr<IPropertyUtilities> PropertyUtilities;
 
 protected:
+	// List of character strings displayed in the pull-down menu.
 	TArray<TSharedPtr<FString>> DisplayStrings;
 
 public:
