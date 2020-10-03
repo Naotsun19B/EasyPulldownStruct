@@ -29,6 +29,12 @@ public:
 	FEPS_PulldownStructBase(const FName& InKey) : Key(InKey) {}
 	FEPS_PulldownStructBase() : Key(NAME_None) {}
 
+#if WITH_EDITOR
+	// Get the items to be displayed in the pull-down menu.
+	// Build a list from data tables, arrays, etc. at the inheritance destination.
+	virtual TArray<TSharedPtr<FString>> GetDisplayStrings() const { return TArray<TSharedPtr<FString>>(); }
+#endif
+
 	// Overload operators.
 	FORCEINLINE bool operator ==(const FEPS_PulldownStructBase& Other) const
 	{
@@ -54,10 +60,6 @@ public:
 	{
 		return Key;
 	}
-
-	// Get the items to be displayed in the pull-down menu.
-	// Build a list from data tables, arrays, etc. at the inheritance destination.
-	virtual TArray<TSharedPtr<FString>> GetDisplayStrings() const { return TArray<TSharedPtr<FString>>(); }
 };
 
 /**
@@ -66,8 +68,7 @@ public:
  */
 #if WITH_EDITOR
 #define REGISTER_PULLDOWN_STRUCT() \
-	const FString& StructName = StaticStruct()->GetName(); \
-	UEPS_DisplayStringsContainer::Get()->RegisterDisplayStrings(StructName, GetDisplayStrings()); \
+	UEPS_DisplayStringsContainer::Get()->RegisterDisplayStrings(StaticStruct()->GetName(), GetDisplayStrings()); \
 	static_cast<FEPS_PulldownStructBase*>(this); // Prevents use in structures that do not inherit from FEPS_PulldownStructBase.
 #else
 #define REGISTER_PULLDOWN_STRUCT()
@@ -88,9 +89,9 @@ public:
 	{
 		return TArray<TSharedPtr<FString>> 
 		{
-			MakeShareable(new FString(TEXT("Item A"))),
-			MakeShareable(new FString(TEXT("Item B"))),
-			MakeShareable(new FString(TEXT("Item C")))
+			MakeShareable(new FString(TEXT("ItemA"))),
+			MakeShareable(new FString(TEXT("ItemB"))),
+			MakeShareable(new FString(TEXT("ItemC")))
 		};
 	}
 };

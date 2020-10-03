@@ -8,21 +8,19 @@
 void SEPS_PulldownGraphPin::Construct(const FArguments& InArgs, UEdGraphPin* InGraphPinObj)
 {
 	SGraphPin::Construct(SGraphPin::FArguments(), InGraphPinObj);
-
-	DisplayStrings.Empty();
-	DisplayStrings = InArgs._InDisplayStrings;
-
-	const TSharedPtr<FString>& DefaultValue = MakeShareable(new FString(FName(NAME_None).ToString()));
-	if (!DisplayStrings.Contains(DefaultValue))
-	{
-		DisplayStrings.Insert(DefaultValue, 0);
-	}
 }
 
 TSharedRef<SWidget>	SEPS_PulldownGraphPin::GetDefaultValueWidget()
 {
-	// Create a list of strings to display in the pull-down menu, including the default value None.
-	DisplayStrings.Add(MakeShareable<FString>(new FString(FName(NAME_None).ToString())));
+	// Get a list of strings to display in the pull-down menu from the name of the structure of your own pin.
+	DisplayStrings.Empty();
+	if (UEdGraphPin* Pin = GetPinObj())
+	{
+		if (auto Struct = Cast<UStruct>(Pin->PinType.PinSubCategoryObject))
+		{
+			UEPS_DisplayStringsContainer::Get()->GetDisplayStrings(Struct->GetName(), DisplayStrings);
+		}
+	}
 
 	int Index = 0;
 	FString CurrentDefault = GraphPinObj->GetDefaultAsString();
@@ -86,7 +84,7 @@ void SEPS_PulldownGraphPin::OnValueChanged(TSharedPtr<FString> ItemSelected, ESe
 {
 	if (ItemSelected.IsValid())
 	{
-		if (DisplayStrings.Find(ItemSelected))
+		if (DisplayStrings.Contains(ItemSelected))
 		{
 			// Apply the selected string to the graph pin string.
 			FString KeyString = FString::Printf(TEXT("(Key=%s)"), *(*ItemSelected));

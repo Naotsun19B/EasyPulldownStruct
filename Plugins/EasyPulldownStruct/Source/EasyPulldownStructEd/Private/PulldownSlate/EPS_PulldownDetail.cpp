@@ -15,12 +15,6 @@ TSharedRef<IPropertyTypeCustomization> IEPS_PulldownDetail::MakeInstance(const T
 	Instance.Get().DisplayStrings.Empty();
 	Instance.Get().DisplayStrings = InDisplayStrings;
 
-	const TSharedPtr<FString>& DefaultValue = MakeShareable(new FString(FName(NAME_None).ToString()));
-	if (!Instance.Get().DisplayStrings.Contains(DefaultValue))
-	{
-		Instance.Get().DisplayStrings.Insert(DefaultValue, 0);
-	}
-
 	return Instance;
 }
 

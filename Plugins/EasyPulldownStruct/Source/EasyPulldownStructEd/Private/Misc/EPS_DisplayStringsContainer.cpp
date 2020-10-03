@@ -59,7 +59,16 @@ bool UEPS_DisplayStringsContainer::GetDisplayStrings(const FString& StructName, 
 {
 	if (DisplayStringsList.Contains(StructName))
 	{
+		DisplayStrings.Empty();
 		DisplayStrings = DisplayStringsList[StructName];
+
+		// Be sure to put "None" so that the list is not empty.
+		const TSharedPtr<FString>& DefaultValue = MakeShareable(new FString(FName(NAME_None).ToString()));
+		if (!DisplayStrings.Contains(DefaultValue))
+		{
+			DisplayStrings.Insert(DefaultValue, 0);
+		}
+
 		return true;
 	}
 

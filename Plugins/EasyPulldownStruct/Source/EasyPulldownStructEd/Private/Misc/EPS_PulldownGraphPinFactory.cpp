@@ -28,11 +28,7 @@ TSharedPtr<SGraphPin> FEPS_PulldownGraphPinFactory::CreatePin(UEdGraphPin* InPin
 		{
 			if (IsInheritPulldownStructBase(Struct))
 			{
-				TArray<TSharedPtr<FString>> DisplayStrings;
-				if (UEPS_DisplayStringsContainer::Get()->GetDisplayStrings(Struct->GetName(), DisplayStrings))
-				{
-					return SNew(SEPS_PulldownGraphPin, InPin).InDisplayStrings(DisplayStrings);
-				}
+				return SNew(SEPS_PulldownGraphPin, InPin);
 			}
 		}
 	}
