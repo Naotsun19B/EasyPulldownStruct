@@ -28,6 +28,7 @@ void UEPS_DisplayStringsContainer::BeginDestroy()
 	for (const auto& Key : Keys)
 	{
 		PropertyModule.UnregisterCustomPropertyTypeLayout(FName(Key));
+
 		UE_LOG(LogEasyPulldownStruct, Log, TEXT("Unregistered - %s"), *Key);
 	}
 
@@ -57,7 +58,23 @@ bool UEPS_DisplayStringsContainer::RegisterDisplayStrings(const FString& StructN
 	return bCanRegister;
 }
 
-bool UEPS_DisplayStringsContainer::GetDisplayStrings(const FString& StructName, TArray<TSharedPtr<FString>>& DisplayStrings)
+bool UEPS_DisplayStringsContainer::UnregisterDisplayStrings(const FString& StructName)
+{
+	bool bCanUnregister = DisplayStringsList.Contains(StructName);
+	if (bCanUnregister)
+	{
+		DisplayStringsList.Remove(StructName);
+
+		FPropertyEditorModule& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
+		PropertyModule.UnregisterCustomPropertyTypeLayout(FName(StructName));
+
+		UE_LOG(LogEasyPulldownStruct, Log, TEXT("Unregistered - %s"), *StructName);
+	}
+
+	return bCanUnregister;
+}
+
+bool UEPS_DisplayStringsContainer::GetDisplayStrings(const FString& StructName, TArray<TSharedPtr<FString>>& DisplayStrings) const
 {
 	if (DisplayStringsList.Contains(StructName))
 	{

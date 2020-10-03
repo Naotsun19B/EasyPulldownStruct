@@ -33,9 +33,13 @@ public:
 	// Returns false if already registered.
 	bool RegisterDisplayStrings(const FString& StructName, const TArray<TSharedPtr<FString>>& DisplayStrings);
 	
+	// Unregister information on the map.
+	// Returns false if not registered.
+	bool UnregisterDisplayStrings(const FString& StructName);
+
 	// Get the registered information.
 	// Returns false if not registered.
-	bool GetDisplayStrings(const FString& StructName, TArray<TSharedPtr<FString>>& DisplayStrings);
+	bool GetDisplayStrings(const FString& StructName, TArray<TSharedPtr<FString>>& DisplayStrings) const;
 
 private:
 	// Since it is a singleton class, the constructor is sealed.
