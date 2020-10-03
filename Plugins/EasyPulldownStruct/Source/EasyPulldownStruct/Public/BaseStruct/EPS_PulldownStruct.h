@@ -58,7 +58,9 @@ public:
 
 protected:
 #if WITH_EDITOR
-	void RegisterPulldownStruct(const FString& StructName, const TArray<TSharedPtr<FString>>& DisplayStrings);
+	// It is used inside the macro registered in the pull-down menu to 
+	// prevent the editor module of this plugin from being needed by an external module.
+	void RegisterPulldownStruct(UScriptStruct* StaticStruct, const TArray<TSharedPtr<FString>>& DisplayStrings);
 #endif
 };
 
@@ -68,7 +70,7 @@ protected:
  */
 #if WITH_EDITOR
 #define REGISTER_PULLDOWN_STRUCT() \
-	RegisterPulldownStruct(StaticStruct()->GetName(), GetDisplayStrings()); \
+	RegisterPulldownStruct(StaticStruct(), GetDisplayStrings()); \
 	static_cast<FEPS_PulldownStructBase*>(this); // Prevents use in structures that do not inherit from FEPS_PulldownStructBase.
 #else
 #define REGISTER_PULLDOWN_STRUCT()

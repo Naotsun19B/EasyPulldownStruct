@@ -14,4 +14,5 @@ MONOLITHIC_HEADER_BOILERPLATE()
 
 /* Public includes.
 *****************************************************************************/
-#include "EPS_EditorGlobal.h"
+
+#include "Misc/EPS_DisplayStringsContainer.h"
