@@ -2,6 +2,8 @@
 
 #include "Misc/EPS_DisplayStringsContainer.h"
 #include "EPS_EditorGlobals.h"
+#include "PropertyEditorModule.h"
+#include "PulldownSlate/EPS_PulldownDetail.h"
 
 UEPS_DisplayStringsContainer* UEPS_DisplayStringsContainer::This = nullptr;
 
@@ -39,6 +41,15 @@ bool UEPS_DisplayStringsContainer::RegisterDisplayStrings(const FString& StructN
 	if (bCanRegister)
 	{
 		DisplayStringsList.Add(StructName, DisplayStrings);
+
+		FPropertyEditorModule& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor"); 
+		PropertyModule.RegisterCustomPropertyTypeLayout(FName(StructName), FOnGetPropertyTypeCustomizationInstance::CreateLambda([StructName]() -> TSharedRef<IPropertyTypeCustomization> 
+		{ 
+				TArray<TSharedPtr<FString>> DisplayStrings; 
+				UEPS_DisplayStringsContainer::Get()->GetDisplayStrings(StructName, DisplayStrings); 
+				return IEPS_PulldownDetail::MakeInstance(DisplayStrings); 
+		})); 
+
 		UE_LOG(LogEasyPulldownStruct, Log, TEXT("Registered - %s"), *StructName);
 	}
 	return bCanRegister;

@@ -5,9 +5,7 @@
 #include "CoreMinimal.h"
 
 #if WITH_EDITOR
-#include "PropertyEditorModule.h"
-#include "PulldownSlate/EPS_PulldownDetail.h"
-#include "Misc/EPS_DisplayStringsContainer.h"
+#include "EPS_EditorGlobals.h"
 #endif
 
 #include "EPS_PulldownStruct.generated.h"
@@ -69,15 +67,7 @@ public:
 #if WITH_EDITOR
 #define REGISTER_PULLDOWN_STRUCT() \
 	const FString& StructName = StaticStruct()->GetName(); \
-	if (UEPS_DisplayStringsContainer::Get()->RegisterDisplayStrings(StructName, GetDisplayStrings())) \
-	{ \
-		FPropertyEditorModule& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor"); \
-		auto DisplayStrings = GetDisplayStrings(); \
-		PropertyModule.RegisterCustomPropertyTypeLayout(FName(StructName), FOnGetPropertyTypeCustomizationInstance::CreateLambda([DisplayStrings]() -> TSharedRef<IPropertyTypeCustomization> \
-		{ \
-			return IEPS_PulldownDetail::MakeInstance(DisplayStrings); \
-		})); \
-	} \
+	UEPS_DisplayStringsContainer::Get()->RegisterDisplayStrings(StructName, GetDisplayStrings()); \
 	static_cast<FEPS_PulldownStructBase*>(this); // Prevents use in structures that do not inherit from FEPS_PulldownStructBase.
 #else
 #define REGISTER_PULLDOWN_STRUCT()

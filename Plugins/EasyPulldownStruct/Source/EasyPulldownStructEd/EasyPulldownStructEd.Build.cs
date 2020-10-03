@@ -27,8 +27,6 @@ public class EasyPulldownStructEd : ModuleRules
                 "GraphEditor",
                 "PropertyEditor",
                 "BlueprintGraph",
-
-                //"EasyPulldownStruct",
             }
 			);
 	}
