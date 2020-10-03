@@ -8,6 +8,12 @@
 #include "DetailWidgetRow.h"
 #include "IPropertyUtilities.h"
 
+namespace PulldownDetailInternal
+{
+	// The variable name of the variable that holds the selected string in the pull-down menu structure.
+	static const FString& KeyPropertyName = TEXT("Key");
+}
+
 TSharedRef<IPropertyTypeCustomization> IEPS_PulldownDetail::MakeInstance(const TArray<TSharedPtr<FString>>& InDisplayStrings)
 {
 	TSharedRef<IEPS_PulldownDetail> Instance = MakeShareable(new IEPS_PulldownDetail());
@@ -26,10 +32,10 @@ void IEPS_PulldownDetail::CustomizeHeader(TSharedRef<IPropertyHandle> InStructPr
 	StructPropertyHandle->GetNumChildren(NumChildren);
 
 	FName Key;
-	for (uint32 ChildIndex = 0; ChildIndex < NumChildren; ++ChildIndex)
+	for (uint32 ChildIndex = 0; ChildIndex < NumChildren; ChildIndex++)
 	{
 		const TSharedPtr< IPropertyHandle > ChildHandle = StructPropertyHandle->GetChildHandle(ChildIndex);
-		if (ChildHandle->GetProperty()->GetName() == TEXT("Key"))
+		if (ChildHandle->GetProperty()->GetName() == PulldownDetailInternal::KeyPropertyName)
 		{
 			KeyHandle = ChildHandle;
 			ChildHandle->GetValue(Key);
@@ -51,7 +57,7 @@ void IEPS_PulldownDetail::CustomizeHeader(TSharedRef<IPropertyHandle> InStructPr
 	}
 	if (!bIsFound)
 	{
-		Key = TEXT("None");
+		Key = NAME_None;
 		KeyHandle->SetValue(Key);
 		UE_LOG(LogEasyPulldownStruct, Error, TEXT("The string \"%s\" was not found in the list."), *Key.ToString());
 	}
@@ -84,7 +90,7 @@ void IEPS_PulldownDetail::OnStateValueChanged(TSharedPtr<FString> ItemSelected, 
 {
 	if (ItemSelected.IsValid())
 	{
-		if (DisplayStrings.Find(ItemSelected))
+		if (DisplayStrings.Contains(ItemSelected))
 		{
 			KeyHandle->SetValue(FName(**ItemSelected));
 		}
