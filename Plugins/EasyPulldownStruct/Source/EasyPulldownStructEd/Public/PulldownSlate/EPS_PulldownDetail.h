@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -14,7 +14,7 @@ class STextComboBox;
 enum class ECheckBoxState : uint8;
 
 /**
- * ƒvƒ‹ƒ_ƒEƒ“ƒƒjƒ…[‚ÌƒJƒXƒ^ƒ€Ú×İ’è‚ÌŠî’êƒNƒ‰ƒX.
+ * ãƒ—ãƒ«ãƒ€ã‚¦ãƒ³ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã®ã‚«ã‚¹ã‚¿ãƒ è©³ç´°è¨­å®šã®åŸºåº•ã‚¯ãƒ©ã‚¹.
  */
 class EASYPULLDOWNSTRUCTED_API IEPS_PulldownDetail : public IPropertyTypeCustomization
 {
