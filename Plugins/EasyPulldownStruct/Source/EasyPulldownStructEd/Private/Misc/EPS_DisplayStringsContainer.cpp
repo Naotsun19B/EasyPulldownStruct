@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Misc/EPS_DisplayStringsContainer.h"
-#include "PropertyEditorModule.h"
+#include "EPS_EditorGlobals.h"
 
 UEPS_DisplayStringsContainer* UEPS_DisplayStringsContainer::This = nullptr;
 
@@ -26,18 +26,22 @@ void UEPS_DisplayStringsContainer::BeginDestroy()
 	for (const auto& Key : Keys)
 	{
 		PropertyModule.UnregisterCustomPropertyTypeLayout(FName(Key));
+		UE_LOG(LogEasyPulldownStruct, Log, TEXT("Unregistered - %s"), *Key);
 	}
 
 	Super::BeginDestroy();
 }
 
-void UEPS_DisplayStringsContainer::RegisterDisplayStrings(const FString& StructName, const TArray<TSharedPtr<FString>>& DisplayStrings)
+bool UEPS_DisplayStringsContainer::RegisterDisplayStrings(const FString& StructName, const TArray<TSharedPtr<FString>>& DisplayStrings)
 {
 	// Check for duplicates.
-	if (!DisplayStringsList.Contains(StructName))
+	bool bCanRegister = !DisplayStringsList.Contains(StructName);
+	if (bCanRegister)
 	{
 		DisplayStringsList.Add(StructName, DisplayStrings);
+		UE_LOG(LogEasyPulldownStruct, Log, TEXT("Registered - %s"), *StructName);
 	}
+	return bCanRegister;
 }
 
 bool UEPS_DisplayStringsContainer::GetDisplayStrings(const FString& StructName, TArray<TSharedPtr<FString>>& DisplayStrings)

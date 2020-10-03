@@ -9,8 +9,14 @@ void SEPS_PulldownGraphPin::Construct(const FArguments& InArgs, UEdGraphPin* InG
 {
 	SGraphPin::Construct(SGraphPin::FArguments(), InGraphPinObj);
 
-	//DisplayStrings.Add(MakeShareable(new FString(FName(NAME_None).ToString())));
-	DisplayStrings.Append(InArgs._InDisplayStrings);
+	DisplayStrings.Empty();
+	DisplayStrings = InArgs._InDisplayStrings;
+
+	const TSharedPtr<FString>& DefaultValue = MakeShareable(new FString(FName(NAME_None).ToString()));
+	if (!DisplayStrings.Contains(DefaultValue))
+	{
+		DisplayStrings.Insert(DefaultValue, 0);
+	}
 }
 
 TSharedRef<SWidget>	SEPS_PulldownGraphPin::GetDefaultValueWidget()

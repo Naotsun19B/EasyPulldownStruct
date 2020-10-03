@@ -69,14 +69,16 @@ public:
 #if WITH_EDITOR
 #define REGISTER_PULLDOWN_STRUCT() \
 	const FString& StructName = StaticStruct()->GetName(); \
-	UEPS_DisplayStringsContainer::Get()->RegisterDisplayStrings(StructName, GetDisplayStrings()); \
-	FPropertyEditorModule& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor"); \
-	PropertyModule.RegisterCustomPropertyTypeLayout(FName(StructName), FOnGetPropertyTypeCustomizationInstance::CreateLambda([this]() -> TSharedRef<IPropertyTypeCustomization> \
+	if (UEPS_DisplayStringsContainer::Get()->RegisterDisplayStrings(StructName, GetDisplayStrings())) \
 	{ \
-		return IEPS_PulldownDetail::MakeInstance(GetDisplayStrings()); \
-	}));
-
-	// static_assert(TIsDerivedFrom<TResult, FEPS_PulldownStructBase>::IsDerived, "This class or struct does not inherit from FEPS_PulldownStructBase."); 
+		FPropertyEditorModule& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor"); \
+		auto DisplayStrings = GetDisplayStrings(); \
+		PropertyModule.RegisterCustomPropertyTypeLayout(FName(StructName), FOnGetPropertyTypeCustomizationInstance::CreateLambda([DisplayStrings]() -> TSharedRef<IPropertyTypeCustomization> \
+		{ \
+			return IEPS_PulldownDetail::MakeInstance(DisplayStrings); \
+		})); \
+	} \
+	static_cast<FEPS_PulldownStructBase*>(this); // Prevents use in structures that do not inherit from FEPS_PulldownStructBase.
 #else
 #define REGISTER_PULLDOWN_STRUCT()
 #endif
@@ -119,8 +121,8 @@ public:
 		return TArray<TSharedPtr<FString>>
 		{
 			MakeShareable(new FString(TEXT("Hoge"))),
-				MakeShareable(new FString(TEXT("Fuga"))),
-				MakeShareable(new FString(TEXT("Piyo")))
+			MakeShareable(new FString(TEXT("Fuga"))),
+			MakeShareable(new FString(TEXT("Piyo")))
 		};
 	}
 };

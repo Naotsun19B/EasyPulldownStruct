@@ -30,7 +30,8 @@ public:
 	// End of UObject interface.
 
 	// Register information on the map.
-	void RegisterDisplayStrings(const FString& StructName, const TArray<TSharedPtr<FString>>& DisplayStrings);
+	// Returns false if already registered.
+	bool RegisterDisplayStrings(const FString& StructName, const TArray<TSharedPtr<FString>>& DisplayStrings);
 	
 	// Get the registered information.
 	// Returns false if not registered.
