@@ -2,6 +2,7 @@
 
 #include "PulldownStructAsset/EPS_AssetTypeActions_PulldownStructAsset.h"
 #include "EPS_EditorGlobals.h"
+#include "PulldownStructAsset/EPS_PulldownStructAsset.h"
 #include "Toolkits/SimpleAssetEditor.h"
 
 UClass* FEPS_AssetTypeActions_PulldownStructAsset::GetSupportedClass() const

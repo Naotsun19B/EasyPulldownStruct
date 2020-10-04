@@ -2,6 +2,7 @@
 
 #include "PulldownSlate/EPS_PulldownGraphPin.h"
 #include "EPS_EditorGlobals.h"
+#include "Misc/EPS_DisplayStringsContainer.h"
 #include "Kismet2/KismetEditorUtilities.h"
 #include "Widgets/Input/STextComboBox.h"
 

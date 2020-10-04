@@ -2,8 +2,9 @@
 
 #include "Misc/EPS_DisplayStringsContainer.h"
 #include "EPS_EditorGlobals.h"
-#include "PropertyEditorModule.h"
 #include "PulldownSlate/EPS_PulldownDetail.h"
+#include "PropertyEditorModule.h"
+#include "Modules\ModuleManager.h"
 
 UEPS_DisplayStringsContainer* UEPS_DisplayStringsContainer::This = nullptr;
 
@@ -27,7 +28,7 @@ void UEPS_DisplayStringsContainer::BeginDestroy()
 	DisplayStringsList.GetKeys(Keys);
 	for (const auto& Key : Keys)
 	{
-		PropertyModule.UnregisterCustomPropertyTypeLayout(FName(Key));
+		PropertyModule.UnregisterCustomPropertyTypeLayout(FName(*Key));
 
 		UE_LOG(LogEasyPulldownStruct, Log, TEXT("Unregistered - %s"), *Key);
 	}
@@ -44,7 +45,7 @@ bool UEPS_DisplayStringsContainer::RegisterDisplayStrings(const FString& StructN
 		DisplayStringsList.Add(StructName, DisplayStrings);
 
 		FPropertyEditorModule& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor"); 
-		PropertyModule.RegisterCustomPropertyTypeLayout(FName(StructName), FOnGetPropertyTypeCustomizationInstance::CreateLambda([StructName]() -> TSharedRef<IPropertyTypeCustomization> 
+		PropertyModule.RegisterCustomPropertyTypeLayout(FName(*StructName), FOnGetPropertyTypeCustomizationInstance::CreateLambda([StructName]() -> TSharedRef<IPropertyTypeCustomization> 
 		{ 
 				TArray<TSharedPtr<FString>> DisplayStrings; 
 				auto Container = UEPS_DisplayStringsContainer::Get();
@@ -66,7 +67,7 @@ bool UEPS_DisplayStringsContainer::UnregisterDisplayStrings(const FString& Struc
 		DisplayStringsList.Remove(StructName);
 
 		FPropertyEditorModule& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
-		PropertyModule.UnregisterCustomPropertyTypeLayout(FName(StructName));
+		PropertyModule.UnregisterCustomPropertyTypeLayout(FName(*StructName));
 
 		UE_LOG(LogEasyPulldownStruct, Log, TEXT("Unregistered - %s"), *StructName);
 	}

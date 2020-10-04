@@ -1,14 +1,17 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 using UnrealBuildTool;
+using System.IO;
 
 public class EasyPulldownStruct : ModuleRules
 {
 	public EasyPulldownStruct(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
-		
-		PublicDependencyModuleNames.AddRange(
+
+        PublicIncludePaths.Add(Path.Combine(ModuleDirectory, "Public"));
+
+        PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
 				"Core",

@@ -2,8 +2,11 @@
 
 #include "PulldownStructAsset/EPS_PulldownStructAssetFactory.h"
 #include "EPS_EditorGlobals.h"
-#include "Kismet2\StructureEditorUtils.h"
-#include "UserDefinedStructure\UserDefinedStructEditorData.h"
+#include "PulldownStructAsset/EPS_PulldownStructAsset.h"
+#include "EdGraph/EdGraphPin.h"
+#include "EdGraphSchema_K2.h"
+#include "Kismet2/StructureEditorUtils.h"
+#include "UserDefinedStructure/UserDefinedStructEditorData.h"
 
 UEPS_PulldownStructAssetFactory::UEPS_PulldownStructAssetFactory(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
@@ -47,7 +50,11 @@ UObject* UEPS_PulldownStructAssetFactory::FactoryCreateNew(UClass* Class, UObjec
 	for (TFieldIterator<FProperty> PropertyItr(PulldownStructAsset); PropertyItr; ++PropertyItr)
 	{
 		FProperty* Property = *PropertyItr;
+#if BEFORE_UE425
+		if (auto NameProperty = Cast<UNameProperty>(Property))
+#else
 		if (auto NameProperty = CastField<FNameProperty>(Property))
+#endif
 		{
 			AddedVariable = Property;
 			break;

@@ -3,6 +3,7 @@
 #include "Misc/EPS_PulldownGraphPinFactory.h"
 #include "EPS_EditorGlobals.h"
 #include "PulldownSlate/EPS_PulldownGraphPin.h"
+#include "BaseStruct/EPS_PulldownStruct.h"
 #include "SGraphPin.h"
 #include "EdGraph/EdGraphPin.h"
 #include "EdGraphSchema_K2.h"
