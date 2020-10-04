@@ -32,20 +32,24 @@ class EASYPULLDOWNSTRUCT_API UEPS_PulldownStructAsset : public UUserDefinedStruc
 
 #if WITH_EDITORONLY_DATA
 protected:
+	// The content is copied to the Tooltip of a regular struct asset.
+	UPROPERTY(EditAnywhere, Category = "Tooltip", meta = (MultiLine = true))
+	FString Tooltip;
+
 	// Type of data that is the basis of the pull-down menu.
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "PulldownSource")
 	EEPS_PulldownSource PulldownSource;
 
 	// Data table asset from which the pull-down menu is based.
-	UPROPERTY(EditAnywhere, meta = (EditCondition = "PulldownSource == EEPS_PulldownSource::DataTable"))
+	UPROPERTY(EditAnywhere, Category = "PulldownSource", meta = (EditCondition = "PulldownSource == EEPS_PulldownSource::DataTable"))
 	UDataTable* SourceDataTable;
 
 	// String table asset from which the pull-down menu is based.
-	UPROPERTY(EditAnywhere, meta = (EditCondition = "PulldownSource == EEPS_PulldownSource::StringTable"))
+	UPROPERTY(EditAnywhere, Category = "PulldownSource", meta = (EditCondition = "PulldownSource == EEPS_PulldownSource::StringTable"))
 	UStringTable* SourceStringTable;
 
 	// An array of strings that is the basis of the pull-down menu.
-	UPROPERTY(EditAnywhere, meta = (EditCondition = "PulldownSource == EEPS_PulldownSource::Array"))
+	UPROPERTY(EditAnywhere, Category = "PulldownSource", meta = (EditCondition = "PulldownSource == EEPS_PulldownSource::Array"))
 	TArray<FString> SourceArray;
 #endif
 

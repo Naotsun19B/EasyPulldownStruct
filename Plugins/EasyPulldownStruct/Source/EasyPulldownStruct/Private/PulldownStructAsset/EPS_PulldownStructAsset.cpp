@@ -1,10 +1,14 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "PulldownStructAsset/EPS_PulldownStructAsset.h"
-#include "EPS_EditorGlobals.h"
 #include "Engine/DataTable.h"
 #include "Internationalization/StringTable.h"
 #include "Internationalization/StringTableCore.h"
+
+#if WITH_EDITOR
+#include "EasyPulldownStructEd.h"
+#include "Kismet2\StructureEditorUtils.h"
+#endif
 
 #if WITH_EDITOR
 void UEPS_PulldownStructAsset::PostLoad()
@@ -29,7 +33,7 @@ void UEPS_PulldownStructAsset::PostEditChangeProperty(FPropertyChangedEvent& Pro
 	{
 		for (auto& Element : SourceArray)
 		{
-			Element.Replace(TEXT(" "), TEXT(""));
+			Element = Element.Replace(TEXT(" "), TEXT(""));
 		}
 	}
 
@@ -40,6 +44,12 @@ void UEPS_PulldownStructAsset::PostEditChangeProperty(FPropertyChangedEvent& Pro
 		PropertyChangedEvent.Property->GetFName() == GET_MEMBER_NAME_CHECKED(UEPS_PulldownStructAsset, SourceArray))
 	{
 		RegisterPulldownStruct(true);
+	}
+
+	// Copy the content into a regular struct asset tooltip.
+	if (PropertyChangedEvent.Property->GetFName() == GET_MEMBER_NAME_CHECKED(UEPS_PulldownStructAsset, Tooltip))
+	{
+		FStructureEditorUtils::ChangeTooltip(this, Tooltip);
 	}
 }
 

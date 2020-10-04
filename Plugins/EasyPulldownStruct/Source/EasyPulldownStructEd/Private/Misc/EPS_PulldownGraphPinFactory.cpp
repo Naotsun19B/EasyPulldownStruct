@@ -7,13 +7,6 @@
 #include "EdGraph/EdGraphPin.h"
 #include "EdGraphSchema_K2.h"
 
-namespace PulldownGraphPinFactoryInternal
-{
-	// The structure name is defined here, 
-	// although it is not a very desirable way to eliminate module interdependence.
-	static const FString PulldownStructBaseName = TEXT("EPS_PulldownStructBase");
-}
-
 void FEPS_PulldownGraphPinFactory::RegisterPulldownGraphPinFactory()
 {
 	TSharedPtr<FEPS_PulldownGraphPinFactory> This = MakeShareable(new FEPS_PulldownGraphPinFactory());
@@ -38,11 +31,16 @@ TSharedPtr<SGraphPin> FEPS_PulldownGraphPinFactory::CreatePin(UEdGraphPin* InPin
 
 bool FEPS_PulldownGraphPinFactory::IsInheritPulldownStructBase(UStruct* InStruct) const
 {
-	if (IsValid(InStruct))
+	UScriptStruct* BaseStruct = FEPS_PulldownStructBase::StaticStruct();
+	if (IsValid(InStruct) && IsValid(BaseStruct))
 	{
-		if (auto SuperStruct = InStruct->GetSuperStruct())
+		if (InStruct->GetName() == BaseStruct->GetName())
 		{
-			if (SuperStruct->GetName() == PulldownGraphPinFactoryInternal::PulldownStructBaseName)
+			return true;
+		}
+		else if (auto SuperStruct = InStruct->GetSuperStruct())
+		{
+			if (SuperStruct->GetName() == BaseStruct->GetName())
 			{
 				return true;
 			}
@@ -50,13 +48,6 @@ bool FEPS_PulldownGraphPinFactory::IsInheritPulldownStructBase(UStruct* InStruct
 			if (!IsInheritPulldownStructBase(SuperStruct))
 			{
 				return false;
-			}
-		}
-		else
-		{
-			if (InStruct->GetName() == PulldownGraphPinFactoryInternal::PulldownStructBaseName)
-			{
-				return true;
 			}
 		}
 	}

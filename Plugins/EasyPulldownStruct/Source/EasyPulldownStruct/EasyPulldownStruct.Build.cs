@@ -21,8 +21,6 @@ public class EasyPulldownStruct : ModuleRules
             {
                 "CoreUObject",
                 "Engine",
-                "Slate",
-                "SlateCore",
 				// ... add private dependencies that you statically link with here ...	
 			}
             );
@@ -30,13 +28,14 @@ public class EasyPulldownStruct : ModuleRules
         if (Target.Type == TargetRules.TargetType.Editor)
         {
             PrivateDependencyModuleNames.AddRange(
-            new string[]
-            {
-                "PropertyEditor",
-                "EasyPulldownStructEd",
-				// ... add private dependencies that you statically link with here ...	
-			}
-            );
+                new string[]
+                {
+                    "UnrealEd",
+
+                    "EasyPulldownStructEd",
+				    // ... add private dependencies that you statically link with here ...	
+			    }
+                );
         }
     }
 }
