@@ -2,6 +2,7 @@
 
 #include "PulldownSlate/EPS_PulldownDetail.h"
 #include "EPS_EditorGlobals.h"
+#include "Misc/EPS_EditorFunctionLibrary.h"
 #include "PulldownStructAsset/EPS_PulldownStructAsset.h"
 #include "Widgets/Input/STextComboBox.h"
 #include "Widgets/Input/SCheckBox.h"
@@ -20,16 +21,23 @@ TSharedRef<IPropertyTypeCustomization> IEPS_PulldownDetail::MakeInstance()
 	return MakeShareable(new IEPS_PulldownDetail());
 }
 
-#pragma optimize("", off)
 void IEPS_PulldownDetail::CustomizeHeader(TSharedRef<IPropertyHandle> InStructPropertyHandle, FDetailWidgetRow& HeaderRow, IPropertyTypeCustomizationUtils& StructCustomizationUtils)
 {
 	StructPropertyHandle = InStructPropertyHandle;
 
+	// Get a list of strings to display in the pull-down menu from the name of the structure of your own pin.
 	if (auto StructProperty = CastField<FStructProperty>(StructPropertyHandle->GetProperty()))
 	{
+		// Get a list of strings to cast and display for structure assets for pull-down menus.
 		if (auto PulldownStructAsset = Cast<UEPS_PulldownStructAsset>(StructProperty->Struct))
 		{
 			DisplayStrings = PulldownStructAsset->GetDisplayStrings();
+		}
+		// Get an instance of the structure from the DefaultStructInstance associated with StaticStruct, 
+		// and get the list of strings to display from that instance.
+		else if (auto PulldownData = FEPS_EditorFunctionLibrary::GetPulldownData(StructProperty->Struct))
+		{
+			DisplayStrings = PulldownData->GetDisplayStrings();
 		}
 	}
 
@@ -53,7 +61,7 @@ void IEPS_PulldownDetail::CustomizeHeader(TSharedRef<IPropertyHandle> InStructPr
 			ChildHandle->GetValue(Key);
 		}
 	}
-	//check(KeyHandle.IsValid());
+	check(KeyHandle.IsValid());
 
 	if (!KeyHandle.IsValid())
 	{
@@ -99,7 +107,6 @@ void IEPS_PulldownDetail::CustomizeHeader(TSharedRef<IPropertyHandle> InStructPr
 			]
 		];
 }
-#pragma optimize("", on)
 
 void IEPS_PulldownDetail::CustomizeChildren(TSharedRef<IPropertyHandle> InStructPropertyHandle, IDetailChildrenBuilder& StructBuilder, IPropertyTypeCustomizationUtils& StructCustomizationUtils)
 {

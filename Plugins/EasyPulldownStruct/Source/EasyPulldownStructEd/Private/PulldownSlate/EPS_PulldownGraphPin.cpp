@@ -13,7 +13,6 @@ void SEPS_PulldownGraphPin::Construct(const FArguments& InArgs, UEdGraphPin* InG
 	SGraphPin::Construct(SGraphPin::FArguments(), InGraphPinObj);
 }
 
-#pragma optimize("", off)
 TSharedRef<SWidget>	SEPS_PulldownGraphPin::GetDefaultValueWidget()
 {
 	// Get a list of strings to display in the pull-down menu from the name of the structure of your own pin.
@@ -100,7 +99,6 @@ TSharedRef<SWidget>	SEPS_PulldownGraphPin::GetDefaultValueWidget()
 			.InitiallySelectedItem(DisplayStrings[Index])
 		];
 }
-#pragma optimize("", on)
 
 void SEPS_PulldownGraphPin::OnValueChanged(TSharedPtr<FString> ItemSelected, ESelectInfo::Type SelectInfo)
 {

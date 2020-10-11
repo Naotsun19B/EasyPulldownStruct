@@ -37,6 +37,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FName Key;
 
+public:
 	// Constructor.
 	FEPS_PulldownStructBase(const FName& InKey) : Key(InKey) {}
 	FEPS_PulldownStructBase() : Key(NAME_None) {}
