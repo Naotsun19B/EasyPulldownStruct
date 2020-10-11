@@ -18,13 +18,15 @@ public:
 	}
 
 #if WITH_EDITOR
-	virtual TArray<TSharedPtr<FString>> GetDisplayStrings() const override 
+	virtual EEPS_PulldownSource GetPulldownSourceType() const { return EEPS_PulldownSource::Array; }
+
+	virtual TArray<FString> GetSourceArray() const override 
 	{
-		return TArray<TSharedPtr<FString>> 
+		return TArray<FString>
 		{
-			MakeShareable(new FString(TEXT("ItemA"))),
-			MakeShareable(new FString(TEXT("ItemB"))),
-			MakeShareable(new FString(TEXT("ItemC")))
+			TEXT("ItemA"),
+			TEXT("ItemB"),
+			TEXT("ItemC")
 		};
 	}
 #endif

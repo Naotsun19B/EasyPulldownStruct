@@ -15,4 +15,3 @@ MONOLITHIC_HEADER_BOILERPLATE()
 /* Public includes.
 *****************************************************************************/
 
-#include "Misc/EPS_DisplayStringsContainer.h"

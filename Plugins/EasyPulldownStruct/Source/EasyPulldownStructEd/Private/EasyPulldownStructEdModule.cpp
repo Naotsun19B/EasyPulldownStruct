@@ -3,9 +3,12 @@
 #include "CoreMinimal.h"
 #include "Modules/ModuleInterface.h"
 #include "Modules/ModuleManager.h"
+#include "PropertyEditorModule.h"
 #include "EPS_EditorGlobals.h"
+#include "PulldownSlate/EPS_PulldownDetail.h"
 #include "Misc/EPS_PulldownGraphPinFactory.h"
 #include "PulldownStructAsset/EPS_AssetTypeActions_PulldownStructAsset.h"
+#include "PulldownStructAsset/EPS_PulldownStructAsset.h"
 
 DEFINE_LOG_CATEGORY(LogEasyPulldownStruct);
 
@@ -29,6 +32,9 @@ void FEasyPulldownStructModuleEd::StartupModule()
 
 	// Register a factory class that generates pins for pull-down menus.
 	FEPS_PulldownGraphPinFactory::RegisterPulldownGraphPinFactory();
+	
+	FPropertyEditorModule& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
+	PropertyModule.RegisterCustomPropertyTypeLayout(FName("TestPulldown"), FOnGetPropertyTypeCustomizationInstance::CreateStatic(&IEPS_PulldownDetail::MakeInstance));
 }
 
 void FEasyPulldownStructModuleEd::ShutdownModule()

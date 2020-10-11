@@ -2,6 +2,7 @@
 
 #include "PulldownSlate/EPS_PulldownDetail.h"
 #include "EPS_EditorGlobals.h"
+#include "PulldownStructAsset/EPS_PulldownStructAsset.h"
 #include "Widgets/Input/STextComboBox.h"
 #include "Widgets/Input/SCheckBox.h"
 #include "PropertyHandle.h"
@@ -14,19 +15,30 @@ namespace PulldownDetailInternal
 	static const FString& KeyPropertyName = TEXT("Key");
 }
 
-TSharedRef<IPropertyTypeCustomization> IEPS_PulldownDetail::MakeInstance(const TArray<TSharedPtr<FString>>& InDisplayStrings)
+TSharedRef<IPropertyTypeCustomization> IEPS_PulldownDetail::MakeInstance()
 {
-	TSharedRef<IEPS_PulldownDetail> Instance = MakeShareable(new IEPS_PulldownDetail());
-
-	Instance.Get().DisplayStrings.Empty();
-	Instance.Get().DisplayStrings = InDisplayStrings;
-
-	return Instance;
+	return MakeShareable(new IEPS_PulldownDetail());
 }
 
+#pragma optimize("", off)
 void IEPS_PulldownDetail::CustomizeHeader(TSharedRef<IPropertyHandle> InStructPropertyHandle, FDetailWidgetRow& HeaderRow, IPropertyTypeCustomizationUtils& StructCustomizationUtils)
 {
 	StructPropertyHandle = InStructPropertyHandle;
+
+	if (auto StructProperty = CastField<FStructProperty>(StructPropertyHandle->GetProperty()))
+	{
+		if (auto PulldownStructAsset = Cast<UEPS_PulldownStructAsset>(StructProperty->Struct))
+		{
+			DisplayStrings = PulldownStructAsset->GetDisplayStrings();
+		}
+	}
+
+	// Be sure to put "None" so that the list is not empty.
+	const TSharedPtr<FString>& DefaultValue = MakeShareable(new FString(FName(NAME_None).ToString()));
+	if (!DisplayStrings.Contains(DefaultValue))
+	{
+		DisplayStrings.Insert(DefaultValue, 0);
+	}
 
 	uint32 NumChildren;
 	StructPropertyHandle->GetNumChildren(NumChildren);
@@ -41,7 +53,12 @@ void IEPS_PulldownDetail::CustomizeHeader(TSharedRef<IPropertyHandle> InStructPr
 			ChildHandle->GetValue(Key);
 		}
 	}
-	check(KeyHandle.IsValid());
+	//check(KeyHandle.IsValid());
+
+	if (!KeyHandle.IsValid())
+	{
+		return;
+	}
 
 	// Check if the obtained Key is in the list.
 	int Index = 0;
@@ -82,6 +99,7 @@ void IEPS_PulldownDetail::CustomizeHeader(TSharedRef<IPropertyHandle> InStructPr
 			]
 		];
 }
+#pragma optimize("", on)
 
 void IEPS_PulldownDetail::CustomizeChildren(TSharedRef<IPropertyHandle> InStructPropertyHandle, IDetailChildrenBuilder& StructBuilder, IPropertyTypeCustomizationUtils& StructCustomizationUtils)
 {

@@ -31,7 +31,7 @@ protected:
 
 public:
 	// Create a new instance with a list of strings.
-	static TSharedRef<IPropertyTypeCustomization> MakeInstance(const TArray<TSharedPtr<FString>>& InDisplayStrings);
+	static TSharedRef<IPropertyTypeCustomization> MakeInstance();
 
 	// IPropertyTypeCustomization interface.
 	virtual void CustomizeHeader(TSharedRef<IPropertyHandle> InStructPropertyHandle, FDetailWidgetRow& HeaderRow, IPropertyTypeCustomizationUtils& StructCustomizationUtils) override;

@@ -4,22 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Engine/UserDefinedStruct.h"
+#include "BaseStruct/EPS_PulldownStruct.h"
 #include "EPS_PulldownStructAsset.generated.h"
 
 class UDataTable;
 class UStringTable;
 struct FPropertyChangedEvent;
-
-/**
- * Type of data that is the basis of the pull-down menu.
- */
-UENUM()
-enum class EEPS_PulldownSource : uint8
-{
-	DataTable,
-	StringTable,
-	Array
-};
 
 /**
  * Structure asset class for pull-down menus.
@@ -57,13 +47,8 @@ protected:
 public:
 	// UObject interface.
 	virtual void PostLoad() override;
-	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent);
+	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 	// End of UObject interface.
-
-protected:
-	// Register this structure asset as a pull-down menu.
-	// Set "bIsUpdate" to true to update the content.
-	void RegisterPulldownStruct(bool bIsUpdate = false);
 
 	// Get the items to be displayed in the pull-down menu.
 	virtual TArray<TSharedPtr<FString>> GetDisplayStrings() const;

@@ -2,8 +2,10 @@
 
 #include "Misc/EPS_PulldownGraphPinFactory.h"
 #include "EPS_EditorGlobals.h"
+#include "Misc/EPS_EditorFunctionLibrary.h"
 #include "PulldownSlate/EPS_PulldownGraphPin.h"
 #include "BaseStruct/EPS_PulldownStruct.h"
+#include "PulldownStructAsset/EPS_PulldownStructAsset.h"
 #include "SGraphPin.h"
 #include "EdGraph/EdGraphPin.h"
 #include "EdGraphSchema_K2.h"
@@ -20,7 +22,8 @@ TSharedPtr<SGraphPin> FEPS_PulldownGraphPinFactory::CreatePin(UEdGraphPin* InPin
 	{
 		if (auto Struct = Cast<UStruct>(InPin->PinType.PinSubCategoryObject))
 		{
-			if (IsInheritPulldownStructBase(Struct))
+			if (FEPS_EditorFunctionLibrary::IsInheritPulldownStructBase(Struct) || 
+				FEPS_EditorFunctionLibrary::IsInheritPulldownStructAsset(Struct))
 			{
 				return SNew(SEPS_PulldownGraphPin, InPin);
 			}
@@ -28,30 +31,4 @@ TSharedPtr<SGraphPin> FEPS_PulldownGraphPinFactory::CreatePin(UEdGraphPin* InPin
 	}
 	
 	return nullptr;
-}
-
-bool FEPS_PulldownGraphPinFactory::IsInheritPulldownStructBase(UStruct* InStruct) const
-{
-	UScriptStruct* BaseStruct = FEPS_PulldownStructBase::StaticStruct();
-	if (IsValid(InStruct) && IsValid(BaseStruct))
-	{
-		if (InStruct->GetName() == BaseStruct->GetName())
-		{
-			return true;
-		}
-		else if (auto SuperStruct = InStruct->GetSuperStruct())
-		{
-			if (SuperStruct->GetName() == BaseStruct->GetName())
-			{
-				return true;
-			}
-
-			if (!IsInheritPulldownStructBase(SuperStruct))
-			{
-				return false;
-			}
-		}
-	}
-
-	return false;
 }

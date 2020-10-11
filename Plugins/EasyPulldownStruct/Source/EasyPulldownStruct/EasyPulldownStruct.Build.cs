@@ -34,8 +34,6 @@ public class EasyPulldownStruct : ModuleRules
                 new string[]
                 {
                     "UnrealEd",
-
-                    "EasyPulldownStructEd",
 				    // ... add private dependencies that you statically link with here ...	
 			    }
                 );

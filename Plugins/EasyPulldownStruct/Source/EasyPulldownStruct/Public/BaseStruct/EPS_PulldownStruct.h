@@ -5,6 +5,23 @@
 #include "CoreMinimal.h"
 #include "EPS_PulldownStruct.generated.h"
 
+class UDataTable;
+class UStringTable;
+
+#if WITH_EDITOR
+/**
+ * Type of data that is the basis of the pull-down menu.
+ */
+UENUM()
+enum class EEPS_PulldownSource : uint8
+{
+	DataTable,
+	StringTable,
+	Array,
+	InValid		UMETA(meta = (Hidden))
+};
+#endif
+
 /**
  * Base structure of the structure displayed as a pull-down menu.
  * To create a pull-down menu structure in C++, define a structure that inherits this structure.
@@ -23,12 +40,6 @@ public:
 	// Constructor.
 	FEPS_PulldownStructBase(const FName& InKey) : Key(InKey) {}
 	FEPS_PulldownStructBase() : Key(NAME_None) {}
-
-#if WITH_EDITOR
-	// Get the items to be displayed in the pull-down menu.
-	// Build a list from data tables, arrays, etc. at the inheritance destination.
-	virtual TArray<TSharedPtr<FString>> GetDisplayStrings() const { return TArray<TSharedPtr<FString>>(); }
-#endif
 
 	// Overload operators.
 	FORCEINLINE bool operator ==(const FEPS_PulldownStructBase& Other) const
@@ -56,21 +67,71 @@ public:
 		return Key;
 	}
 
-protected:
 #if WITH_EDITOR
-	// It is used inside the macro registered in the pull-down menu to 
-	// prevent the editor module of this plugin from being needed by an external module.
-	void RegisterPulldownStruct(UScriptStruct* StaticStruct, const TArray<TSharedPtr<FString>>& DisplayStrings);
+protected:
+	// Get type of data that is the basis of the pull-down menu.
+	virtual EEPS_PulldownSource GetPulldownSourceType() const { return EEPS_PulldownSource::InValid; }
+	
+	// Get data table asset from which the pull-down menu is based.
+	virtual UDataTable* GetSourceDataTable() const { return nullptr; }
+	
+	// Get string table asset from which the pull-down menu is based.
+	virtual UStringTable* GetSourceStringTable() const { return nullptr; }
+	
+	// Get array of strings that is the basis of the pull-down menu.
+	virtual TArray<FString> GetSourceArray() const { return TArray<FString>(); }
+
+	// It is used inside the macro registered in the pull-down menu.
+	void RegisterPulldownStructInternal(UScriptStruct* StaticStruct);
 #endif
 };
 
+#if WITH_EDITOR
+/**
+ * A container class that summarizes the necessary data in the pull-down menu.
+ */
+UCLASS()
+class EASYPULLDOWNSTRUCT_API UEPS_PulldownData : public UObject
+{
+	GENERATED_BODY()
+
+private:
+	friend FEPS_PulldownStructBase;
+
+	// Type of data that is the basis of the pull-down menu.
+	UPROPERTY()
+	EEPS_PulldownSource SourceType;
+
+	// Data table asset from which the pull-down menu is based.
+	UPROPERTY()
+	UDataTable* SourceDataTable;
+
+	// String table asset from which the pull-down menu is based.
+	UPROPERTY()
+	UStringTable* SourceStringTable;
+
+	// An array of strings that is the basis of the pull-down menu.
+	UPROPERTY()
+	TArray<FString> SourceArray;
+
+public:
+	// Get the items to be displayed in the pull-down menu.
+	TArray<TSharedPtr<FString>> GetDisplayStrings() const;
+};
+#endif
+
+#if WITH_EDITOR
+// Internal function to get the list of required strings in the pull-down menu.
+TArray<TSharedPtr<FString>> GetDisplayStringsInternal(EEPS_PulldownSource SourceType, UDataTable* SourceDataTable, UStringTable* SourceStringTable, const TArray<FString>& SourceArray);
+#endif
+
+#if WITH_EDITOR
 /**
  * Macro for registration required to display pull-down menu on editor.
  * Place it in the constructor of a structure that inherits FEPS_PulldownStructBase.
  */
-#if WITH_EDITOR
 #define REGISTER_PULLDOWN_STRUCT() \
-	RegisterPulldownStruct(StaticStruct(), GetDisplayStrings()); \
+	RegisterPulldownStructInternal(StaticStruct()); \
 	static_cast<FEPS_PulldownStructBase*>(this); // Prevents use in structures that do not inherit from FEPS_PulldownStructBase.
 #else
 #define REGISTER_PULLDOWN_STRUCT()

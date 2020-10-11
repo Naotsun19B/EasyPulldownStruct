@@ -2,7 +2,9 @@
 
 #include "PulldownSlate/EPS_PulldownGraphPin.h"
 #include "EPS_EditorGlobals.h"
-#include "Misc/EPS_DisplayStringsContainer.h"
+#include "Misc/EPS_EditorFunctionLibrary.h"
+#include "BaseStruct/EPS_PulldownStruct.h"
+#include "PulldownStructAsset/EPS_PulldownStructAsset.h"
 #include "Kismet2/KismetEditorUtilities.h"
 #include "Widgets/Input/STextComboBox.h"
 
@@ -11,21 +13,39 @@ void SEPS_PulldownGraphPin::Construct(const FArguments& InArgs, UEdGraphPin* InG
 	SGraphPin::Construct(SGraphPin::FArguments(), InGraphPinObj);
 }
 
+#pragma optimize("", off)
 TSharedRef<SWidget>	SEPS_PulldownGraphPin::GetDefaultValueWidget()
 {
 	// Get a list of strings to display in the pull-down menu from the name of the structure of your own pin.
 	DisplayStrings.Empty();
 	if (UEdGraphPin* Pin = GetPinObj())
 	{
-		if (auto Struct = Cast<UStruct>(Pin->PinType.PinSubCategoryObject))
+		// Get a list of strings to cast and display for structure assets for pull-down menus.
+		if (auto PulldownStructAsset = Cast<UEPS_PulldownStructAsset>(Pin->PinType.PinSubCategoryObject))
 		{
-			UEPS_DisplayStringsContainer::Get()->GetDisplayStrings(Struct->GetName(), DisplayStrings);
+			DisplayStrings = PulldownStructAsset->GetDisplayStrings();
 		}
+		// Get an instance of the structure from the DefaultStructInstance associated with StaticStruct, 
+		// and get the list of strings to display from that instance.
+		else if (auto Struct = Cast<UStruct>(Pin->PinType.PinSubCategoryObject))
+		{
+			if (auto PulldownData = FEPS_EditorFunctionLibrary::GetPulldownData(Struct))
+			{
+				DisplayStrings = PulldownData->GetDisplayStrings();
+			}
+		}
+	}
+
+	// Be sure to put "None" so that the list is not empty.
+	const TSharedPtr<FString>& DefaultValue = MakeShareable(new FString(FName(NAME_None).ToString()));
+	if (!DisplayStrings.Contains(DefaultValue))
+	{
+		DisplayStrings.Insert(DefaultValue, 0);
 	}
 
 	int Index = 0;
 	FString CurrentDefault = GraphPinObj->GetDefaultAsString();
-	if (CurrentDefault.Len() > 0)
+	if (CurrentDefault.Len() > 2)
 	{
 		// Remove "Key =" and parentheses.
 		int32 StartIndex = 5;
@@ -80,6 +100,7 @@ TSharedRef<SWidget>	SEPS_PulldownGraphPin::GetDefaultValueWidget()
 			.InitiallySelectedItem(DisplayStrings[Index])
 		];
 }
+#pragma optimize("", on)
 
 void SEPS_PulldownGraphPin::OnValueChanged(TSharedPtr<FString> ItemSelected, ESelectInfo::Type SelectInfo)
 {
