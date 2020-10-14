@@ -2,7 +2,8 @@
 
 #include "PulldownSlate/EPS_PulldownDetail.h"
 #include "EPS_EditorGlobals.h"
-#include "Misc/EPS_EditorFunctionLibrary.h"
+#include "Misc/EPS_PulldownStructEditorUtils.h"
+#include "BaseStruct/EPS_PulldownStruct.h"
 #include "PulldownStructAsset/EPS_PulldownStructAsset.h"
 #include "Widgets/Input/STextComboBox.h"
 #include "Widgets/Input/SCheckBox.h"
@@ -35,7 +36,7 @@ void IEPS_PulldownDetail::CustomizeHeader(TSharedRef<IPropertyHandle> InStructPr
 		}
 		// Get an instance of the structure from the DefaultStructInstance associated with StaticStruct, 
 		// and get the list of strings to display from that instance.
-		else if (auto PulldownData = FEPS_EditorFunctionLibrary::GetPulldownData(StructProperty->Struct))
+		else if (auto PulldownData = FEPS_PulldownStructEditorUtils::GetPulldownData(StructProperty->Struct))
 		{
 			DisplayStrings = PulldownData->GetDisplayStrings();
 		}

@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/UserDefinedStruct.h"
-#include "BaseStruct/EPS_PulldownStruct.h"
+#include "Misc/EPS_PulldownStructUtils.h"
 #include "EPS_PulldownStructAsset.generated.h"
 
 class UDataTable;

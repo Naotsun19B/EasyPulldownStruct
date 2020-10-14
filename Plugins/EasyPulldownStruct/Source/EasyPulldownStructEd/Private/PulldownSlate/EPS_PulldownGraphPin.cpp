@@ -2,7 +2,7 @@
 
 #include "PulldownSlate/EPS_PulldownGraphPin.h"
 #include "EPS_EditorGlobals.h"
-#include "Misc/EPS_EditorFunctionLibrary.h"
+#include "Misc/EPS_PulldownStructEditorUtils.h"
 #include "BaseStruct/EPS_PulldownStruct.h"
 #include "PulldownStructAsset/EPS_PulldownStructAsset.h"
 #include "Kismet2/KismetEditorUtilities.h"
@@ -28,7 +28,7 @@ TSharedRef<SWidget>	SEPS_PulldownGraphPin::GetDefaultValueWidget()
 		// and get the list of strings to display from that instance.
 		else if (auto Struct = Cast<UStruct>(Pin->PinType.PinSubCategoryObject))
 		{
-			if (auto PulldownData = FEPS_EditorFunctionLibrary::GetPulldownData(Struct))
+			if (auto PulldownData = FEPS_PulldownStructEditorUtils::GetPulldownData(Struct))
 			{
 				DisplayStrings = PulldownData->GetDisplayStrings();
 			}

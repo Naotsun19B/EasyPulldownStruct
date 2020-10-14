@@ -3,24 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Misc/EPS_PulldownStructUtils.h"
 #include "EPS_PulldownStruct.generated.h"
 
 class UDataTable;
 class UStringTable;
-
-#if WITH_EDITOR
-/**
- * Type of data that is the basis of the pull-down menu.
- */
-UENUM()
-enum class EEPS_PulldownSource : uint8
-{
-	DataTable,
-	StringTable,
-	Array,
-	InValid		UMETA(meta = (Hidden))
-};
-#endif
 
 /**
  * Base structure of the structure displayed as a pull-down menu.
@@ -119,11 +106,6 @@ public:
 	// Get the items to be displayed in the pull-down menu.
 	TArray<TSharedPtr<FString>> GetDisplayStrings() const;
 };
-#endif
-
-#if WITH_EDITOR
-// Internal function to get the list of required strings in the pull-down menu.
-TArray<TSharedPtr<FString>> GetDisplayStringsInternal(EEPS_PulldownSource SourceType, UDataTable* SourceDataTable, UStringTable* SourceStringTable, const TArray<FString>& SourceArray);
 #endif
 
 #if WITH_EDITOR

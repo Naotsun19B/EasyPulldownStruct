@@ -23,7 +23,7 @@
     {
       "Name": "EasyPulldownStructEd",
       "Type": "Editor",
-      "LoadingPhase": "PreDefault"
+      "LoadingPhase": "PostDefault"
     }
   ]
 }

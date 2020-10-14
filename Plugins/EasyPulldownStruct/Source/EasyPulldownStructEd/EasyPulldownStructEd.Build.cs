@@ -26,7 +26,9 @@ public class EasyPulldownStructEd : ModuleRules
                 "AssetTools",
                 "Kismet",
                 "UnrealEd",
+                "LevelEditor",
                 "GraphEditor",
+                "AssetRegistry",
                 "PropertyEditor",
                 "BlueprintGraph",
 

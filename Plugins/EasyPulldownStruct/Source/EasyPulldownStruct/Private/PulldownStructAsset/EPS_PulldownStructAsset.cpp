@@ -40,6 +40,6 @@ void UEPS_PulldownStructAsset::PostEditChangeProperty(FPropertyChangedEvent& Pro
 
 TArray<TSharedPtr<FString>> UEPS_PulldownStructAsset::GetDisplayStrings() const
 {
-	return GetDisplayStringsInternal(PulldownSource, SourceDataTable, SourceStringTable, SourceArray);
+	return FEPS_PulldownStructUtils::GetDisplayStringsInternal(PulldownSource, SourceDataTable, SourceStringTable, SourceArray);
 }
 #endif

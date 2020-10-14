@@ -2,7 +2,7 @@
 
 #include "Misc/EPS_PulldownGraphPinFactory.h"
 #include "EPS_EditorGlobals.h"
-#include "Misc/EPS_EditorFunctionLibrary.h"
+#include "Misc/EPS_PulldownStructEditorUtils.h"
 #include "PulldownSlate/EPS_PulldownGraphPin.h"
 #include "BaseStruct/EPS_PulldownStruct.h"
 #include "PulldownStructAsset/EPS_PulldownStructAsset.h"
@@ -22,8 +22,8 @@ TSharedPtr<SGraphPin> FEPS_PulldownGraphPinFactory::CreatePin(UEdGraphPin* InPin
 	{
 		if (auto Struct = Cast<UStruct>(InPin->PinType.PinSubCategoryObject))
 		{
-			if (FEPS_EditorFunctionLibrary::IsInheritPulldownStructBase(Struct) || 
-				FEPS_EditorFunctionLibrary::IsInheritPulldownStructAsset(Struct))
+			if (FEPS_PulldownStructEditorUtils::IsInheritPulldownStructBase(Struct) || 
+				FEPS_PulldownStructEditorUtils::IsInheritPulldownStructAsset(Struct))
 			{
 				return SNew(SEPS_PulldownGraphPin, InPin);
 			}
