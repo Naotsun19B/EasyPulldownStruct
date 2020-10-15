@@ -13,7 +13,6 @@ void SEPS_PulldownGraphPin::Construct(const FArguments& InArgs, UEdGraphPin* InG
 	SGraphPin::Construct(SGraphPin::FArguments(), InGraphPinObj);
 }
 
-#pragma optimize("", off)
 TSharedRef<SWidget>	SEPS_PulldownGraphPin::GetDefaultValueWidget()
 {
 	// Get a list of strings to display in the pull-down menu from the name of the structure of your own pin.
@@ -43,7 +42,7 @@ TSharedRef<SWidget>	SEPS_PulldownGraphPin::GetDefaultValueWidget()
 		DisplayStrings.Insert(DefaultValue, 0);
 	}
 
-	int Index = 0;
+	int32 SelectedIndex = 0;
 	FString CurrentDefault = GraphPinObj->GetDefaultAsString();
 	if (CurrentDefault.Len() > 2)
 	{
@@ -58,11 +57,11 @@ TSharedRef<SWidget>	SEPS_PulldownGraphPin::GetDefaultValueWidget()
 
 		// Find the index on the list from the set character string.
 		bool bIsFound = false;
-		for (int32 Itr = 0; Itr < DisplayStrings.Num(); ++Itr)
+		for (int32 Index = 0; Index < DisplayStrings.Num(); ++Index)
 		{
-			if (DisplayStrings[Itr]->Equals(CurrentDefault))
+			if (DisplayStrings[Index]->Equals(CurrentDefault))
 			{
-				Index = Itr;
+				SelectedIndex = Index;
 				Key = FName(*CurrentDefault);
 				bIsFound = true;
 				break;
@@ -90,10 +89,9 @@ TSharedRef<SWidget>	SEPS_PulldownGraphPin::GetDefaultValueWidget()
 			SNew(STextComboBox)
 			.OptionsSource(&DisplayStrings)
 			.OnSelectionChanged(this, &SEPS_PulldownGraphPin::OnValueChanged)
-			.InitiallySelectedItem(DisplayStrings[Index])
+			.InitiallySelectedItem(DisplayStrings[SelectedIndex])
 		];
 }
-#pragma optimize("", on)
 
 void SEPS_PulldownGraphPin::OnValueChanged(TSharedPtr<FString> ItemSelected, ESelectInfo::Type SelectInfo)
 {

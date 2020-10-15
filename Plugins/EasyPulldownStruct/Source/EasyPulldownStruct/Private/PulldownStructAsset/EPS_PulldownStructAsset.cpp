@@ -7,11 +7,6 @@
 #endif
 
 #if WITH_EDITOR
-void UEPS_PulldownStructAsset::PostLoad()
-{
-	Super::PostLoad();
-}
-
 void UEPS_PulldownStructAsset::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
 	Super::PostEditChangeProperty(PropertyChangedEvent);

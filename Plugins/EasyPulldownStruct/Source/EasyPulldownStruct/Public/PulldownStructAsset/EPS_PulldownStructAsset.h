@@ -46,7 +46,6 @@ protected:
 #if WITH_EDITOR
 public:
 	// UObject interface.
-	virtual void PostLoad() override;
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 	// End of UObject interface.
 
