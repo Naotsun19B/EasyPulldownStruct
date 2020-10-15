@@ -31,6 +31,7 @@ public class EasyPulldownStructEd : ModuleRules
                 "AssetRegistry",
                 "PropertyEditor",
                 "BlueprintGraph",
+                "EditorSubsystem",
 
                 "EasyPulldownStruct",
             }
