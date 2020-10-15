@@ -13,6 +13,7 @@ void SEPS_PulldownGraphPin::Construct(const FArguments& InArgs, UEdGraphPin* InG
 	SGraphPin::Construct(SGraphPin::FArguments(), InGraphPinObj);
 }
 
+#pragma optimize("", off)
 TSharedRef<SWidget>	SEPS_PulldownGraphPin::GetDefaultValueWidget()
 {
 	// Get a list of strings to display in the pull-down menu from the name of the structure of your own pin.
@@ -46,30 +47,23 @@ TSharedRef<SWidget>	SEPS_PulldownGraphPin::GetDefaultValueWidget()
 	FString CurrentDefault = GraphPinObj->GetDefaultAsString();
 	if (CurrentDefault.Len() > 2)
 	{
-		// Remove "Key =" and parentheses.
-		int32 StartIndex = 5;
-		int32 EndIndex;
-		CurrentDefault.FindLastChar(')', EndIndex);
-		FString DefaultValString = CurrentDefault.Mid(StartIndex, EndIndex - StartIndex);
+		// Extract only the value part of the structure string.
+		FString Left;
+		FString Right;
+		CurrentDefault.Split(TEXT("="), &Left, &Right);
+		CurrentDefault = Right;
 
-		// Remove double quotes before and after if necessary.
-		if (DefaultValString[0] == '\"')
-		{
-			DefaultValString = DefaultValString.Mid(1);
-		}
-		if (DefaultValString[DefaultValString.Len() - 1] == '\"')
-		{
-			DefaultValString = DefaultValString.Mid(0, DefaultValString.Len() - 1);
-		}
+		CurrentDefault = CurrentDefault.Replace(TEXT(")"), TEXT(""));
+		CurrentDefault = CurrentDefault.Replace(TEXT("\""), TEXT(""));
 
 		// Find the index on the list from the set character string.
 		bool bIsFound = false;
 		for (int32 Itr = 0; Itr < DisplayStrings.Num(); ++Itr)
 		{
-			if (DisplayStrings[Itr]->Equals(DefaultValString))
+			if (DisplayStrings[Itr]->Equals(CurrentDefault))
 			{
 				Index = Itr;
-				Key = FName(*DefaultValString);
+				Key = FName(*CurrentDefault);
 				bIsFound = true;
 				break;
 			}
@@ -99,6 +93,7 @@ TSharedRef<SWidget>	SEPS_PulldownGraphPin::GetDefaultValueWidget()
 			.InitiallySelectedItem(DisplayStrings[Index])
 		];
 }
+#pragma optimize("", on)
 
 void SEPS_PulldownGraphPin::OnValueChanged(TSharedPtr<FString> ItemSelected, ESelectInfo::Type SelectInfo)
 {
