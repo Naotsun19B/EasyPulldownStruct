@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Engine/UserDefinedStruct.h"
-#include "Misc/EPS_PulldownStructUtils.h"
-#include "EPS_PulldownStructAsset.generated.h"
+#include "Misc/PulldownStructUtils.h"
+#include "PulldownStructAsset.generated.h"
 
 class UDataTable;
 class UStringTable;
@@ -16,7 +16,7 @@ struct FPropertyChangedEvent;
  * Created by extending standard structure assets.
  */
 UCLASS()
-class EASYPULLDOWNSTRUCT_API UEPS_PulldownStructAsset : public UUserDefinedStruct
+class EASYPULLDOWNSTRUCT_API UPulldownStructAsset : public UUserDefinedStruct
 {
 	GENERATED_BODY()
 
@@ -28,18 +28,18 @@ protected:
 
 	// Type of data that is the basis of the pull-down menu.
 	UPROPERTY(EditAnywhere, Category = "PulldownSource")
-	EEPS_PulldownSource PulldownSource;
+	EPulldownSource PulldownSource;
 
 	// Data table asset from which the pull-down menu is based.
-	UPROPERTY(EditAnywhere, Category = "PulldownSource", meta = (EditCondition = "PulldownSource == EEPS_PulldownSource::DataTable"))
+	UPROPERTY(EditAnywhere, Category = "PulldownSource", meta = (EditCondition = "PulldownSource == EPulldownSource::PS_DataTable"))
 	UDataTable* SourceDataTable;
 
 	// String table asset from which the pull-down menu is based.
-	UPROPERTY(EditAnywhere, Category = "PulldownSource", meta = (EditCondition = "PulldownSource == EEPS_PulldownSource::StringTable"))
+	UPROPERTY(EditAnywhere, Category = "PulldownSource", meta = (EditCondition = "PulldownSource == EPulldownSource::PS_StringTable"))
 	UStringTable* SourceStringTable;
 
 	// An array of strings that is the basis of the pull-down menu.
-	UPROPERTY(EditAnywhere, Category = "PulldownSource", meta = (EditCondition = "PulldownSource == EEPS_PulldownSource::Array"))
+	UPROPERTY(EditAnywhere, Category = "PulldownSource", meta = (EditCondition = "PulldownSource == EPulldownSource::PS_Array"))
 	TArray<FString> SourceArray;
 #endif
 

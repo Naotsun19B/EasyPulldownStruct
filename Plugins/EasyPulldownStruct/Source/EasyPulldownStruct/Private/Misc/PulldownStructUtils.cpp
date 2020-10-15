@@ -1,18 +1,18 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "Misc/EPS_PulldownStructUtils.h"
+#include "Misc/PulldownStructUtils.h"
 #include "Engine/DataTable.h"
 #include "Internationalization/StringTable.h"
 #include "Internationalization/StringTableCore.h"
 
 #if WITH_EDITOR
-TArray<TSharedPtr<FString>> FEPS_PulldownStructUtils::GetDisplayStringsInternal(EEPS_PulldownSource SourceType, UDataTable* SourceDataTable, UStringTable* SourceStringTable, const TArray<FString>& SourceArray)
+TArray<TSharedPtr<FString>> FPulldownStructUtils::GetDisplayStringsInternal(EPulldownSource SourceType, UDataTable* SourceDataTable, UStringTable* SourceStringTable, const TArray<FString>& SourceArray)
 {
 	TArray<TSharedPtr<FString>> DisplayStrings;
 
 	switch (SourceType)
 	{
-	case EEPS_PulldownSource::DataTable:
+	case EPulldownSource::PS_DataTable:
 	{
 		if (IsValid(SourceDataTable))
 		{
@@ -26,7 +26,7 @@ TArray<TSharedPtr<FString>> FEPS_PulldownStructUtils::GetDisplayStringsInternal(
 
 		break;
 	}
-	case EEPS_PulldownSource::StringTable:
+	case EPulldownSource::PS_StringTable:
 	{
 		if (IsValid(SourceStringTable))
 		{
@@ -44,7 +44,7 @@ TArray<TSharedPtr<FString>> FEPS_PulldownStructUtils::GetDisplayStringsInternal(
 
 		break;
 	}
-	case EEPS_PulldownSource::Array:
+	case EPulldownSource::PS_Array:
 	{
 		for (const auto& Element : SourceArray)
 		{

@@ -4,20 +4,20 @@
 
 #include "CoreMinimal.h"
 
-class UEPS_PulldownData;
+class UPulldownData;
 
 /**
  * Functions used in the editor module.
  */
-class EASYPULLDOWNSTRUCTED_API FEPS_PulldownStructEditorUtils
+class EASYPULLDOWNSTRUCTED_API FPulldownStructEditorUtils
 {
 public:
-	// Recursive function that determines if a struct inherits from FEPS_PulldownStructBase.
+	// Recursive function that determines if a struct inherits from FPulldownStructBase.
 	static bool IsInheritPulldownStructBase(UStruct* InStruct);
 
-	// Recursive function that determines if a struct inherits from FEPS_PulldownStructAsset.
+	// Recursive function that determines if a struct inherits from FPulldownStructAsset.
 	static bool IsInheritPulldownStructAsset(UStruct* InStruct);
 
 	// Get the data need for the pull-down menu.
-	static UEPS_PulldownData* GetPulldownData(UStruct* InStruct);
+	static UPulldownData* GetPulldownData(UStruct* InStruct);
 };

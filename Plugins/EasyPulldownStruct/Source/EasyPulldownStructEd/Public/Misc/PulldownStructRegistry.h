@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "EditorSubsystem.h"
-#include "EPS_PulldownStructRegistry.generated.h"
+#include "PulldownStructRegistry.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class EASYPULLDOWNSTRUCTED_API UEPS_PulldownStructRegistry : public UEditorSubsystem
+class EASYPULLDOWNSTRUCTED_API UPulldownStructRegistry : public UEditorSubsystem
 {
 	GENERATED_BODY()
 	
@@ -20,19 +20,19 @@ protected:
 
 public:
 	// Gets an instance of this subsystem.
-	static UEPS_PulldownStructRegistry* Get();
+	static UPulldownStructRegistry* Get();
 
 	// USubsystem interface.
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	virtual void Deinitialize() override;
 	// End of USubsystem interface.
 
-	// Get the all structure inheriting FEPS_PulldownStructBase in the project.
+	// Get the all structure inheriting FPulldownStructBase in the project.
 	void GetNativePulldownStructs(TArray<UStruct*>& PulldownStructs);
 
-	// Get all UEPS_PulldownStructAsset under the content folder.
+	// Get all UPulldownStructAsset under the content folder.
 	void GetPulldownStructAssets(TArray<UStruct*>& PulldownStructs);
 
-	// Get the all structure inheriting FEPS_PulldownStructBase and UEPS_PulldownStructAsset in the project.
+	// Get the all structure inheriting FPulldownStructBase and UPulldownStructAsset in the project.
 	void GetAllPulldownStructs(TArray<UStruct*>& PulldownStructs);
 };

@@ -8,7 +8,7 @@
 /**
  * Slate in the graph pin pull-down menu on the Blueprint Editor.
  */
-class EASYPULLDOWNSTRUCTED_API SEPS_PulldownGraphPin : public SGraphPin
+class EASYPULLDOWNSTRUCTED_API SPulldownGraphPin : public SGraphPin
 {
 protected:
 	// List of character strings displayed in the pull-down menu.
@@ -18,7 +18,7 @@ protected:
 	FName Key;
 
 public:
-	SLATE_BEGIN_ARGS(SEPS_PulldownGraphPin) {}
+	SLATE_BEGIN_ARGS(SPulldownGraphPin) {}
 	SLATE_END_ARGS()
 
 	void Construct(const FArguments& InArgs, UEdGraphPin* InGraphPinObj);

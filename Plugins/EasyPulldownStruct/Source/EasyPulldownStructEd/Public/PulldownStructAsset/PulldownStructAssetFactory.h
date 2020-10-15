@@ -4,15 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "Factories/Factory.h"
-#include "EPS_PulldownStructAssetFactory.generated.h"
+#include "PulldownStructAssetFactory.generated.h"
 
-class UEPS_PulldownStructAsset;
+class UPulldownStructAsset;
 
 /**
  * Factory class to create struct assets for pull-down menus.
  */
 UCLASS(HideCategories = "Object")
-class EASYPULLDOWNSTRUCTED_API UEPS_PulldownStructAssetFactory : public UFactory
+class EASYPULLDOWNSTRUCTED_API UPulldownStructAssetFactory : public UFactory
 {
 	GENERATED_UCLASS_BODY()
 	

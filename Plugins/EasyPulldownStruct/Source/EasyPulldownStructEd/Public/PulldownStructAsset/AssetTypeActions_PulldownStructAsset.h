@@ -12,7 +12,7 @@ class IToolkitHost;
  * Structure for pull-down menu in editor class that defines asset information and 
  * operations that can be performed on the asset.
  */
-class FEPS_AssetTypeActions_PulldownStructAsset : public FAssetTypeActions_Base
+class FAssetTypeActions_PulldownStructAsset : public FAssetTypeActions_Base
 {
 public:
 	// FAssetTypeActions_Base interface.

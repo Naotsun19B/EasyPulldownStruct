@@ -16,7 +16,7 @@ enum class ECheckBoxState : uint8;
 /**
  * Custom detail class for pull-down menu structs.
  */
-class EASYPULLDOWNSTRUCTED_API IEPS_PulldownDetail : public IPropertyTypeCustomization
+class EASYPULLDOWNSTRUCTED_API IPulldownDetail : public IPropertyTypeCustomization
 {
 private:
 	// Classes used for Slate to build pull-down menu.

@@ -3,11 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BaseStruct/EPS_PulldownStruct.h"
+#include "BaseStruct/PulldownStructBase.h"
 #include "SampleStruct.generated.h"
 
 USTRUCT(BlueprintType)
-struct PULLDOWNSTRUCTPLUGIN_API FSampleStruct : public FEPS_PulldownStructBase
+struct PULLDOWNSTRUCTPLUGIN_API FSampleStruct : public FPulldownStructBase
 {
 	GENERATED_BODY()
 
@@ -18,7 +18,7 @@ public:
 	}
 
 #if WITH_EDITOR
-	virtual EEPS_PulldownSource GetPulldownSourceType() const { return EEPS_PulldownSource::Array; }
+	virtual EPulldownSource GetPulldownSourceType() const { return EPulldownSource::PS_Array; }
 
 	virtual TArray<FString> GetSourceArray() const override 
 	{

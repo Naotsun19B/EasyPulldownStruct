@@ -16,5 +16,5 @@ MONOLITHIC_HEADER_BOILERPLATE()
 /* Public includes.
 *****************************************************************************/
 
-#include "BaseStruct/EPS_PulldownStruct.h"
-#include "PulldownStructAsset/EPS_PulldownStructAsset.h"
+#include "BaseStruct/PulldownStructBase.h"
+#include "PulldownStructAsset/PulldownStructAsset.h"

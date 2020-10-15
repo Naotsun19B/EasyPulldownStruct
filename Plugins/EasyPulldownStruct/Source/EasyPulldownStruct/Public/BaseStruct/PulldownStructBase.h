@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Misc/EPS_PulldownStructUtils.h"
-#include "EPS_PulldownStruct.generated.h"
+#include "Misc/PulldownStructUtils.h"
+#include "PulldownStructBase.generated.h"
 
 class UDataTable;
 class UStringTable;
@@ -14,7 +14,7 @@ class UStringTable;
  * To create a pull-down menu structure in C++, define a structure that inherits this structure.
  */
 USTRUCT(BlueprintType)
-struct EASYPULLDOWNSTRUCT_API FEPS_PulldownStructBase
+struct EASYPULLDOWNSTRUCT_API FPulldownStructBase
 {
 	GENERATED_BODY()
 
@@ -26,16 +26,16 @@ public:
 
 public:
 	// Constructor.
-	FEPS_PulldownStructBase(const FName& InKey) : Key(InKey) {}
-	FEPS_PulldownStructBase() : Key(NAME_None) {}
+	FPulldownStructBase(const FName& InKey) : Key(InKey) {}
+	FPulldownStructBase() : Key(NAME_None) {}
 
 	// Overload operators.
-	FORCEINLINE bool operator ==(const FEPS_PulldownStructBase& Other) const
+	FORCEINLINE bool operator ==(const FPulldownStructBase& Other) const
 	{
 		return (Key == Other.Key);
 	}
 
-	FORCEINLINE bool operator !=(const FEPS_PulldownStructBase& Other) const
+	FORCEINLINE bool operator !=(const FPulldownStructBase& Other) const
 	{
 		return !(*this == Other);
 	}
@@ -58,7 +58,7 @@ public:
 #if WITH_EDITOR
 protected:
 	// Get type of data that is the basis of the pull-down menu.
-	virtual EEPS_PulldownSource GetPulldownSourceType() const { return EEPS_PulldownSource::InValid; }
+	virtual EPulldownSource GetPulldownSourceType() const { return EPulldownSource::PS_InValid; }
 	
 	// Get data table asset from which the pull-down menu is based.
 	virtual UDataTable* GetSourceDataTable() const { return nullptr; }
@@ -79,16 +79,16 @@ protected:
  * A container class that summarizes the necessary data in the pull-down menu.
  */
 UCLASS()
-class EASYPULLDOWNSTRUCT_API UEPS_PulldownData : public UObject
+class EASYPULLDOWNSTRUCT_API UPulldownData : public UObject
 {
 	GENERATED_BODY()
 
 private:
-	friend FEPS_PulldownStructBase;
+	friend FPulldownStructBase;
 
 	// Type of data that is the basis of the pull-down menu.
 	UPROPERTY()
-	EEPS_PulldownSource SourceType;
+	EPulldownSource SourceType;
 
 	// Data table asset from which the pull-down menu is based.
 	UPROPERTY()
@@ -111,11 +111,11 @@ public:
 #if WITH_EDITOR
 /**
  * Macro for registration required to display pull-down menu on editor.
- * Place it in the constructor of a structure that inherits FEPS_PulldownStructBase.
+ * Place it in the constructor of a structure that inherits FPulldownStructBase.
  */
 #define REGISTER_PULLDOWN_STRUCT() \
 	RegisterPulldownStructInternal(StaticStruct()); \
-	static_cast<FEPS_PulldownStructBase*>(this); // Prevents use in structures that do not inherit from FEPS_PulldownStructBase.
+	static_cast<FPulldownStructBase*>(this); // Prevents use in structures that do not inherit from FPulldownStructBase.
 #else
 #define REGISTER_PULLDOWN_STRUCT()
 #endif

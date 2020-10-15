@@ -1,15 +1,15 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
-#include "BaseStruct/EPS_PulldownStruct.h"
+#include "BaseStruct/PulldownStructBase.h"
 
 #if WITH_EDITOR
-void FEPS_PulldownStructBase::RegisterPulldownStructInternal(UScriptStruct* StaticStruct)
+void FPulldownStructBase::RegisterPulldownStructInternal(UScriptStruct* StaticStruct)
 {
 	auto&& References = StaticStruct->ScriptAndPropertyObjectReferences;
 	bool bIsRegisterd = false;
 	for (const auto& Reference : References)
 	{
-		if (Reference->IsA<UEPS_PulldownData>())
+		if (Reference->IsA<UPulldownData>())
 		{
 			bIsRegisterd = true;
 			break;
@@ -17,7 +17,7 @@ void FEPS_PulldownStructBase::RegisterPulldownStructInternal(UScriptStruct* Stat
 	}
 	if (!bIsRegisterd)
 	{
-		auto PulldownData = NewObject<UEPS_PulldownData>();
+		auto PulldownData = NewObject<UPulldownData>();
 		PulldownData->SourceType = GetPulldownSourceType();
 		PulldownData->SourceDataTable = GetSourceDataTable();
 		PulldownData->SourceStringTable = GetSourceStringTable();
@@ -26,8 +26,8 @@ void FEPS_PulldownStructBase::RegisterPulldownStructInternal(UScriptStruct* Stat
 	}
 }
 
-TArray<TSharedPtr<FString>> UEPS_PulldownData::GetDisplayStrings() const
+TArray<TSharedPtr<FString>> UPulldownData::GetDisplayStrings() const
 {
-	return FEPS_PulldownStructUtils::GetDisplayStringsInternal(SourceType, SourceDataTable, SourceStringTable, SourceArray);
+	return FPulldownStructUtils::GetDisplayStringsInternal(SourceType, SourceDataTable, SourceStringTable, SourceArray);
 }
 #endif

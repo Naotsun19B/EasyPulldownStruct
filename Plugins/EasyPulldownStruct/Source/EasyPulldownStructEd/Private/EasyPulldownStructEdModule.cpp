@@ -3,8 +3,8 @@
 #include "CoreMinimal.h"
 #include "Modules/ModuleInterface.h"
 #include "Modules/ModuleManager.h"
-#include "EPS_EditorGlobals.h"
-#include "PulldownStructAsset/EPS_AssetTypeActions_PulldownStructAsset.h"
+#include "EditorGlobals.h"
+#include "PulldownStructAsset/AssetTypeActions_PulldownStructAsset.h"
 
 DEFINE_LOG_CATEGORY(LogEasyPulldownStruct);
 
@@ -12,7 +12,7 @@ class FEasyPulldownStructModuleEd : public IModuleInterface
 {
 private:
 	// An instance of a class that defines information and operations for structure assets for pull-down menus.
-	TSharedPtr<FEPS_AssetTypeActions_PulldownStructAsset> AssetTypeActions;
+	TSharedPtr<FAssetTypeActions_PulldownStructAsset> AssetTypeActions;
 
 public:
 	// IModuleInterface interface.
@@ -24,7 +24,7 @@ public:
 void FEasyPulldownStructModuleEd::StartupModule()
 {
 	// Register a class that defines information and operations of structure assets for pull-down menu.
-	AssetTypeActions = MakeShareable(new FEPS_AssetTypeActions_PulldownStructAsset());
+	AssetTypeActions = MakeShareable(new FAssetTypeActions_PulldownStructAsset());
 	FAssetToolsModule::GetModule().Get().RegisterAssetTypeActions(AssetTypeActions.ToSharedRef());
 }
 

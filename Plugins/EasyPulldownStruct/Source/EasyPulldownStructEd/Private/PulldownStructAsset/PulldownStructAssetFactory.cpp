@@ -1,36 +1,36 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "PulldownStructAsset/EPS_PulldownStructAssetFactory.h"
-#include "EPS_EditorGlobals.h"
-#include "PulldownStructAsset/EPS_PulldownStructAsset.h"
+#include "PulldownStructAsset/PulldownStructAssetFactory.h"
+#include "EditorGlobals.h"
+#include "PulldownStructAsset/PulldownStructAsset.h"
 #include "EdGraph/EdGraphPin.h"
 #include "EdGraphSchema_K2.h"
 #include "Kismet2/StructureEditorUtils.h"
 #include "UserDefinedStructure/UserDefinedStructEditorData.h"
 
-UEPS_PulldownStructAssetFactory::UEPS_PulldownStructAssetFactory(const FObjectInitializer& ObjectInitializer)
+UPulldownStructAssetFactory::UPulldownStructAssetFactory(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
-	SupportedClass = UEPS_PulldownStructAsset::StaticClass();
+	SupportedClass = UPulldownStructAsset::StaticClass();
 	bCreateNew = true;
 }
 
-bool UEPS_PulldownStructAssetFactory::DoesSupportClass(UClass* Class)
+bool UPulldownStructAssetFactory::DoesSupportClass(UClass* Class)
 {
-	return (Class == UEPS_PulldownStructAsset::StaticClass());
+	return (Class == UPulldownStructAsset::StaticClass());
 }
 
-UClass* UEPS_PulldownStructAssetFactory::ResolveSupportedClass()
+UClass* UPulldownStructAssetFactory::ResolveSupportedClass()
 {
-	return UEPS_PulldownStructAsset::StaticClass();
+	return UPulldownStructAsset::StaticClass();
 }
 
-UObject* UEPS_PulldownStructAssetFactory::FactoryCreateNew(UClass* Class, UObject* InParent, FName Name, EObjectFlags Flags, UObject* Context, FFeedbackContext* Warn)
+UObject* UPulldownStructAssetFactory::FactoryCreateNew(UClass* Class, UObject* InParent, FName Name, EObjectFlags Flags, UObject* Context, FFeedbackContext* Warn)
 {
-	ensure(UEPS_PulldownStructAsset::StaticClass() == Class);
+	ensure(UPulldownStructAsset::StaticClass() == Class);
 
 	// Create a structure asset for pull-down menu through the processing required for a normal structure asset.
-	UEPS_PulldownStructAsset* PulldownStructAsset = NewObject<UEPS_PulldownStructAsset>(InParent, Name, Flags);
+	UPulldownStructAsset* PulldownStructAsset = NewObject<UPulldownStructAsset>(InParent, Name, Flags);
 	check(PulldownStructAsset);
 
 	PulldownStructAsset->EditorData = NewObject<UUserDefinedStructEditorData>(PulldownStructAsset, NAME_None, RF_Transactional);

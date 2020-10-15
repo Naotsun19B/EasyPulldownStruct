@@ -1,10 +1,10 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
-#include "PulldownSlate/EPS_PulldownDetail.h"
-#include "EPS_EditorGlobals.h"
-#include "Misc/EPS_PulldownStructEditorUtils.h"
-#include "BaseStruct/EPS_PulldownStruct.h"
-#include "PulldownStructAsset/EPS_PulldownStructAsset.h"
+#include "PulldownSlate/PulldownDetails.h"
+#include "EditorGlobals.h"
+#include "Misc/PulldownStructEditorUtils.h"
+#include "BaseStruct/PulldownStructBase.h"
+#include "PulldownStructAsset/PulldownStructAsset.h"
 #include "Widgets/Input/STextComboBox.h"
 #include "Widgets/Input/SCheckBox.h"
 #include "PropertyHandle.h"
@@ -17,12 +17,12 @@ namespace PulldownDetailInternal
 	static const FString& KeyPropertyName = TEXT("Key");
 }
 
-TSharedRef<IPropertyTypeCustomization> IEPS_PulldownDetail::MakeInstance()
+TSharedRef<IPropertyTypeCustomization> IPulldownDetail::MakeInstance()
 {
-	return MakeShareable(new IEPS_PulldownDetail());
+	return MakeShareable(new IPulldownDetail());
 }
 
-void IEPS_PulldownDetail::CustomizeHeader(TSharedRef<IPropertyHandle> InStructPropertyHandle, FDetailWidgetRow& HeaderRow, IPropertyTypeCustomizationUtils& StructCustomizationUtils)
+void IPulldownDetail::CustomizeHeader(TSharedRef<IPropertyHandle> InStructPropertyHandle, FDetailWidgetRow& HeaderRow, IPropertyTypeCustomizationUtils& StructCustomizationUtils)
 {
 	StructPropertyHandle = InStructPropertyHandle;
 
@@ -30,13 +30,13 @@ void IEPS_PulldownDetail::CustomizeHeader(TSharedRef<IPropertyHandle> InStructPr
 	if (auto StructProperty = CastField<FStructProperty>(StructPropertyHandle->GetProperty()))
 	{
 		// Get a list of strings to cast and display for structure assets for pull-down menus.
-		if (auto PulldownStructAsset = Cast<UEPS_PulldownStructAsset>(StructProperty->Struct))
+		if (auto PulldownStructAsset = Cast<UPulldownStructAsset>(StructProperty->Struct))
 		{
 			DisplayStrings = PulldownStructAsset->GetDisplayStrings();
 		}
 		// Get an instance of the structure from the DefaultStructInstance associated with StaticStruct, 
 		// and get the list of strings to display from that instance.
-		else if (auto PulldownData = FEPS_PulldownStructEditorUtils::GetPulldownData(StructProperty->Struct))
+		else if (auto PulldownData = FPulldownStructEditorUtils::GetPulldownData(StructProperty->Struct))
 		{
 			DisplayStrings = PulldownData->GetDisplayStrings();
 		}
@@ -103,17 +103,17 @@ void IEPS_PulldownDetail::CustomizeHeader(TSharedRef<IPropertyHandle> InStructPr
 			[
 				SAssignNew(KeyComboBox, STextComboBox)
 				.OptionsSource(&DisplayStrings)
-				.OnSelectionChanged(this, &IEPS_PulldownDetail::OnStateValueChanged)
+				.OnSelectionChanged(this, &IPulldownDetail::OnStateValueChanged)
 				.InitiallySelectedItem(DisplayStrings[Index])
 			]
 		];
 }
 
-void IEPS_PulldownDetail::CustomizeChildren(TSharedRef<IPropertyHandle> InStructPropertyHandle, IDetailChildrenBuilder& StructBuilder, IPropertyTypeCustomizationUtils& StructCustomizationUtils)
+void IPulldownDetail::CustomizeChildren(TSharedRef<IPropertyHandle> InStructPropertyHandle, IDetailChildrenBuilder& StructBuilder, IPropertyTypeCustomizationUtils& StructCustomizationUtils)
 {
 }
 
-void IEPS_PulldownDetail::OnStateValueChanged(TSharedPtr<FString> ItemSelected, ESelectInfo::Type SelectInfo)
+void IPulldownDetail::OnStateValueChanged(TSharedPtr<FString> ItemSelected, ESelectInfo::Type SelectInfo)
 {
 	if (ItemSelected.IsValid())
 	{

@@ -1,13 +1,13 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
-#include "PulldownStructAsset/EPS_PulldownStructAsset.h"
+#include "PulldownStructAsset/PulldownStructAsset.h"
 
 #if WITH_EDITOR
 #include "Kismet2/StructureEditorUtils.h"
 #endif
 
 #if WITH_EDITOR
-void UEPS_PulldownStructAsset::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
+void UPulldownStructAsset::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
 	Super::PostEditChangeProperty(PropertyChangedEvent);
 
@@ -18,7 +18,7 @@ void UEPS_PulldownStructAsset::PostEditChangeProperty(FPropertyChangedEvent& Pro
 	}
 
 	// Check the string for whitespace and remove it if it does.
-	if (PropertyChangedEvent.Property->GetFName() == GET_MEMBER_NAME_CHECKED(UEPS_PulldownStructAsset, SourceArray))
+	if (PropertyChangedEvent.Property->GetFName() == GET_MEMBER_NAME_CHECKED(UPulldownStructAsset, SourceArray))
 	{
 		for (auto& Element : SourceArray)
 		{
@@ -27,14 +27,14 @@ void UEPS_PulldownStructAsset::PostEditChangeProperty(FPropertyChangedEvent& Pro
 	}
 
 	// Copy the content into a regular struct asset tooltip.
-	if (PropertyChangedEvent.Property->GetFName() == GET_MEMBER_NAME_CHECKED(UEPS_PulldownStructAsset, Tooltip))
+	if (PropertyChangedEvent.Property->GetFName() == GET_MEMBER_NAME_CHECKED(UPulldownStructAsset, Tooltip))
 	{
 		FStructureEditorUtils::ChangeTooltip(this, Tooltip);
 	}
 }
 
-TArray<TSharedPtr<FString>> UEPS_PulldownStructAsset::GetDisplayStrings() const
+TArray<TSharedPtr<FString>> UPulldownStructAsset::GetDisplayStrings() const
 {
-	return FEPS_PulldownStructUtils::GetDisplayStringsInternal(PulldownSource, SourceDataTable, SourceStringTable, SourceArray);
+	return FPulldownStructUtils::GetDisplayStringsInternal(PulldownSource, SourceDataTable, SourceStringTable, SourceArray);
 }
 #endif

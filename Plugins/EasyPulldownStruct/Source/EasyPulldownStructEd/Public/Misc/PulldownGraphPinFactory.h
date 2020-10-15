@@ -11,10 +11,10 @@ class UEdGraphPin;
 /**
  * A factory class that registers a custom graph pin that displays a pull-down menu.
  */
-class EASYPULLDOWNSTRUCTED_API FEPS_PulldownGraphPinFactory : public FGraphPanelPinFactory
+class EASYPULLDOWNSTRUCTED_API FPulldownGraphPinFactory : public FGraphPanelPinFactory
 {
 public:
-	// Register FEPS_PulldownGraphPinFactory in the list of GraphPinFactory.
+	// Register FPulldownGraphPinFactory in the list of GraphPinFactory.
 	static void RegisterPulldownGraphPinFactory();
 
 	// FGraphPanelPinFactory interface.

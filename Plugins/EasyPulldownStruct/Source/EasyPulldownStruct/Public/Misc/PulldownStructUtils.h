@@ -12,12 +12,12 @@ class UStringTable;
  * Type of data that is the basis of the pull-down menu.
  */
 UENUM()
-enum class EEPS_PulldownSource : uint8
+enum class EPulldownSource : uint8
 {
-	DataTable,
-	StringTable,
-	Array,
-	InValid		UMETA(meta = (Hidden))
+	PS_DataTable	UMETA(DisplayName = "Data Table"),
+	PS_StringTable	UMETA(DisplayName = "String Table"),
+	PS_Array		UMETA(DisplayName = "Array"),
+	PS_InValid			UMETA(Hidden)
 };
 #endif
 
@@ -25,10 +25,10 @@ enum class EEPS_PulldownSource : uint8
 /**
  * Class that defines general-purpose functions used in the runtime module.
  */
-class FEPS_PulldownStructUtils 
+class FPulldownStructUtils 
 {
 public:
 	// Internal function to get the list of required strings in the pull-down menu.
-	static TArray<TSharedPtr<FString>> GetDisplayStringsInternal(EEPS_PulldownSource SourceType, UDataTable* SourceDataTable, UStringTable* SourceStringTable, const TArray<FString>& SourceArray);
+	static TArray<TSharedPtr<FString>> GetDisplayStringsInternal(EPulldownSource SourceType, UDataTable* SourceDataTable, UStringTable* SourceStringTable, const TArray<FString>& SourceArray);
 };
 #endif

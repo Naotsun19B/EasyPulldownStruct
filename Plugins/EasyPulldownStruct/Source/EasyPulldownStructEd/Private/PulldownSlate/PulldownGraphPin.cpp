@@ -1,26 +1,26 @@
 ﻿// Fill out your copyright notice in the Description page of Project Settings.
 
-#include "PulldownSlate/EPS_PulldownGraphPin.h"
-#include "EPS_EditorGlobals.h"
-#include "Misc/EPS_PulldownStructEditorUtils.h"
-#include "BaseStruct/EPS_PulldownStruct.h"
-#include "PulldownStructAsset/EPS_PulldownStructAsset.h"
+#include "PulldownSlate/PulldownGraphPin.h"
+#include "EditorGlobals.h"
+#include "Misc/PulldownStructEditorUtils.h"
+#include "BaseStruct/PulldownStructBase.h"
+#include "PulldownStructAsset/PulldownStructAsset.h"
 #include "Kismet2/KismetEditorUtilities.h"
 #include "Widgets/Input/STextComboBox.h"
 
-void SEPS_PulldownGraphPin::Construct(const FArguments& InArgs, UEdGraphPin* InGraphPinObj)
+void SPulldownGraphPin::Construct(const FArguments& InArgs, UEdGraphPin* InGraphPinObj)
 {
 	SGraphPin::Construct(SGraphPin::FArguments(), InGraphPinObj);
 }
 
-TSharedRef<SWidget>	SEPS_PulldownGraphPin::GetDefaultValueWidget()
+TSharedRef<SWidget>	SPulldownGraphPin::GetDefaultValueWidget()
 {
 	// Get a list of strings to display in the pull-down menu from the name of the structure of your own pin.
 	DisplayStrings.Empty();
 	if (UEdGraphPin* Pin = GetPinObj())
 	{
 		// Get a list of strings to cast and display for structure assets for pull-down menus.
-		if (auto PulldownStructAsset = Cast<UEPS_PulldownStructAsset>(Pin->PinType.PinSubCategoryObject))
+		if (auto PulldownStructAsset = Cast<UPulldownStructAsset>(Pin->PinType.PinSubCategoryObject))
 		{
 			DisplayStrings = PulldownStructAsset->GetDisplayStrings();
 		}
@@ -28,7 +28,7 @@ TSharedRef<SWidget>	SEPS_PulldownGraphPin::GetDefaultValueWidget()
 		// and get the list of strings to display from that instance.
 		else if (auto Struct = Cast<UStruct>(Pin->PinType.PinSubCategoryObject))
 		{
-			if (auto PulldownData = FEPS_PulldownStructEditorUtils::GetPulldownData(Struct))
+			if (auto PulldownData = FPulldownStructEditorUtils::GetPulldownData(Struct))
 			{
 				DisplayStrings = PulldownData->GetDisplayStrings();
 			}
@@ -88,12 +88,12 @@ TSharedRef<SWidget>	SEPS_PulldownGraphPin::GetDefaultValueWidget()
 		[
 			SNew(STextComboBox)
 			.OptionsSource(&DisplayStrings)
-			.OnSelectionChanged(this, &SEPS_PulldownGraphPin::OnValueChanged)
+			.OnSelectionChanged(this, &SPulldownGraphPin::OnValueChanged)
 			.InitiallySelectedItem(DisplayStrings[SelectedIndex])
 		];
 }
 
-void SEPS_PulldownGraphPin::OnValueChanged(TSharedPtr<FString> ItemSelected, ESelectInfo::Type SelectInfo)
+void SPulldownGraphPin::OnValueChanged(TSharedPtr<FString> ItemSelected, ESelectInfo::Type SelectInfo)
 {
 	if (ItemSelected.IsValid())
 	{
