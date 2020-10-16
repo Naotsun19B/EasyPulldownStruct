@@ -25,6 +25,7 @@ public class EasyPulldownStructEd : ModuleRules
                 "Slate",
                 "SlateCore",
                 "AssetTools",
+                "EditorStyle",
                 "Kismet",
                 "UnrealEd",
                 "GraphEditor",

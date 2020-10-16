@@ -4,6 +4,9 @@
 #include "Modules/ModuleInterface.h"
 #include "Modules/ModuleManager.h"
 #include "LevelEditor.h"
+#include "Misc/Paths.h"
+#include "Styling/SlateStyle.h"
+#include "Styling/SlateStyleRegistry.h"
 #include "EditorGlobals.h"
 #include "PulldownStructAsset/AssetTypeActions_PulldownStructAsset.h"
 #include "PulldownStructViewer/SPulldownStructViewer.h"
@@ -33,6 +36,9 @@ private:
 
 	// Level editor extension point.
 	TSharedPtr<FExtender> Extender;
+
+	// Pull-down menu structure asset icon.
+	TSharedPtr<FSlateStyleSet> StyleSet;
 };
 
 void FEasyPulldownStructModuleEd::StartupModule()
@@ -40,6 +46,31 @@ void FEasyPulldownStructModuleEd::StartupModule()
 	// Register a class that defines information and operations of structure assets for pull-down menu.
 	AssetTypeActions = MakeShareable(new FAssetTypeActions_PulldownStructAsset());
 	FAssetToolsModule::GetModule().Get().RegisterAssetTypeActions(AssetTypeActions.ToSharedRef());
+
+	// Register the icon of the pull-down menu structure asset.
+	StyleSet = MakeShareable(new FSlateStyleSet(TEXT("PulldownStructAssetStyle")));
+	if (StyleSet.IsValid())
+	{
+		StyleSet->SetContentRoot(FPaths::Combine(
+			FPaths::ConvertRelativePathToFull(FPaths::EngineContentDir()),
+			TEXT("Editor"),
+			TEXT("Slate"),
+			TEXT("Icons"),
+			TEXT("AssetIcons")
+		));
+
+		auto Path = StyleSet->RootToContentDir(TEXT("/UserDefinedEnum_64x"));
+
+		// Divert standard Enum asset icons.
+		FSlateImageBrush* Icon = new FSlateImageBrush(
+			StyleSet->RootToContentDir(TEXT("/UserDefinedEnum_64x"), TEXT(".png")), FVector2D(64.f, 64.f)
+		);
+		if (StyleSet.IsValid())
+		{
+			StyleSet->Set("ClassThumbnail.PulldownStructAsset", Icon);
+			FSlateStyleRegistry::RegisterSlateStyle(*StyleSet);
+		}
+	}
 
 	// Add items to the window tab of the level editor.
 	if (!IsRunningCommandlet())
@@ -76,6 +107,9 @@ void FEasyPulldownStructModuleEd::ShutdownModule()
 		LevelEditorModule.GetToolBarExtensibilityManager()->RemoveExtender(Extender);
 	}
 
+	// Unregister the icon of the pull-down menu structure asset.
+	FSlateStyleRegistry::UnRegisterSlateStyle(StyleSet->GetStyleSetName());
+
 	// Unregister a class that defines information and operations of structure assets for pull-down menu.
 	if (AssetTypeActions.IsValid())
 	{
@@ -103,7 +137,7 @@ void FEasyPulldownStructModuleEd::OnWindowMenuExtension(FMenuBuilder& MenuBuilde
 	MenuBuilder.AddMenuEntry(
 		LOCTEXT("PulldownStructViewer_MenuTitle", "Pulldown Struct Viewer"),
 		LOCTEXT("PulldownStructViewer_ToolTip", "Display a list of currently registered pull-down menu structures and the items displayed in that pull-down."),
-		FSlateIcon(),
+		FSlateIcon(FEditorStyle::GetStyleSetName(), "LevelEditor.Tabs.Outliner"),
 		FUIAction(FExecuteAction::CreateLambda([]()
 		{
 			TSharedRef<FGlobalTabmanager> GlobalTabmanager = FGlobalTabmanager::Get();
