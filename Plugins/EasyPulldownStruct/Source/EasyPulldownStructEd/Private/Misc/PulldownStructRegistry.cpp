@@ -25,12 +25,32 @@ void UPulldownStructRegistry::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
 
+	// Bind pull-down menu structure event when an asset is deleted.
+	FEditorDelegates::OnAssetsPreDelete.AddLambda([this](const TArray<UObject*>& AssetsToDelete)
+	{
+		for (const auto& AssetToDelete : AssetsToDelete)
+		{
+			if (auto PulldownStuctAsset = Cast<UPulldownStructAsset>(AssetToDelete))
+			{
+				RegisteredPulldownStructs.Remove(PulldownStuctAsset);
+				OnPulldownStructUnregistered.ExecuteIfBound();
+			}
+		}
+	});
+
 	// Register a factory class that generates pins for pull-down menus.
 	FPulldownGraphPinFactory::RegisterPulldownGraphPinFactory();
 
 	// Register a natively defined pull-down menu structure in details panel customization.	
 	TArray<UStruct*> NativePulldownStructs;
-	GetNativePulldownStructs(NativePulldownStructs);
+	for (TObjectIterator<UStruct> Itr; Itr; ++Itr)
+	{
+		UStruct* Struct = *Itr;
+		if (FPulldownStructEditorUtils::IsInheritPulldownStructBase(Struct))
+		{
+			NativePulldownStructs.Add(Struct);
+		}
+	}
 
 	FPropertyEditorModule& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
 	for (const auto& NativePulldownStruct : NativePulldownStructs)
@@ -56,6 +76,8 @@ void UPulldownStructRegistry::Initialize(FSubsystemCollectionBase& Collection)
 			PropertyModule.RegisterCustomPropertyTypeLayout(PulldownStructAsset->GetFName(), FOnGetPropertyTypeCustomizationInstance::CreateStatic(&IPulldownDetail::MakeInstance));
 			RegisteredPulldownStructs.AddUnique(PulldownStructAsset);
 			UE_LOG(LogEasyPulldownStruct, Log, TEXT("%s has been registered in details panel customization."), *PulldownStructAsset->GetName());
+		
+			OnPulldownStructRegistered.ExecuteIfBound(PulldownStructAsset);
 		}
 	});
 }
@@ -73,43 +95,24 @@ void UPulldownStructRegistry::Deinitialize()
 	Super::Deinitialize();
 }
 
-void UPulldownStructRegistry::GetNativePulldownStructs(TArray<UStruct*>& PulldownStructs)
+void UPulldownStructRegistry::GetNativePulldownStructs(TArray<UStruct*>& NativePulldownStructs)
 {
-	for (TObjectIterator<UStruct> Itr; Itr; ++Itr)
+	for (const auto& RegisteredPulldownStruct : RegisteredPulldownStructs)
 	{
-		UStruct* Struct = *Itr;
-		if (FPulldownStructEditorUtils::IsInheritPulldownStructBase(Struct))
+		if (FPulldownStructEditorUtils::IsInheritPulldownStructBase(RegisteredPulldownStruct))
 		{
-			PulldownStructs.Add(Struct);
+			NativePulldownStructs.Add(RegisteredPulldownStruct);
 		}
 	}
 }
 
-void UPulldownStructRegistry::GetPulldownStructAssets(TArray<UStruct*>& PulldownStructs)
+void UPulldownStructRegistry::GetPulldownStructAssets(TArray<UPulldownStructAsset*>& PulldownStructAssets)
 {
-	FAssetRegistryModule& AssetRegistryModule = FModuleManager::LoadModuleChecked<FAssetRegistryModule>("AssetRegistry");
-	IAssetRegistry& AssetRegistry = AssetRegistryModule.Get();
-
-	FARFilter Filter;
-	Filter.PackagePaths.Add(FName(TEXT("/Game/")));
-	Filter.ClassNames.Add(UPulldownStructAsset::StaticClass()->GetFName());
-	Filter.bRecursivePaths = true;
-	Filter.bRecursiveClasses = true;
-	Filter.bIncludeOnlyOnDiskAssets = false;
-
-	AssetRegistry.EnumerateAllAssets([&PulldownStructs](const FAssetData& AssetData) -> bool
+	for (const auto& RegisteredPulldownStruct : RegisteredPulldownStructs)
 	{
-		if (auto Asset = Cast<UStruct>(AssetData.GetAsset()))
+		if (auto PulldownStructAsset = Cast<UPulldownStructAsset>(RegisteredPulldownStruct))
 		{
-			PulldownStructs.Add(Asset);
+			PulldownStructAssets.Add(PulldownStructAsset);
 		}
-
-		return true;
-	});
-}
-
-void UPulldownStructRegistry::GetAllPulldownStructs(TArray<UStruct*>& PulldownStructs)
-{
-	GetNativePulldownStructs(PulldownStructs);
-	GetPulldownStructAssets(PulldownStructs);
+	}
 }

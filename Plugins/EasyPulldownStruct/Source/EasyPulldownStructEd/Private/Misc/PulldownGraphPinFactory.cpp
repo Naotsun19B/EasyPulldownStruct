@@ -23,7 +23,7 @@ TSharedPtr<SGraphPin> FPulldownGraphPinFactory::CreatePin(UEdGraphPin* InPin) co
 		if (auto Struct = Cast<UStruct>(InPin->PinType.PinSubCategoryObject))
 		{
 			if (FPulldownStructEditorUtils::IsInheritPulldownStructBase(Struct) || 
-				FPulldownStructEditorUtils::IsInheritPulldownStructAsset(Struct))
+				FPulldownStructEditorUtils::IsPulldownStructAsset(Struct))
 			{
 				return SNew(SPulldownGraphPin, InPin);
 			}

@@ -14,6 +14,7 @@ public class EasyPulldownStructEd : ModuleRules
 			{
                 "Core",
                 "CoreUObject",
+                "InputCore",
                 "Engine",
             }
 			);
@@ -26,8 +27,8 @@ public class EasyPulldownStructEd : ModuleRules
                 "AssetTools",
                 "Kismet",
                 "UnrealEd",
-                "LevelEditor",
                 "GraphEditor",
+                "LevelEditor",
                 "AssetRegistry",
                 "PropertyEditor",
                 "BlueprintGraph",

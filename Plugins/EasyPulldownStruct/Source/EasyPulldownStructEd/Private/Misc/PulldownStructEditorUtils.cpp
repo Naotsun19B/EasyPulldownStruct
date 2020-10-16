@@ -26,7 +26,7 @@ bool FPulldownStructEditorUtils::IsInheritPulldownStructBase(UStruct* InStruct)
 	return false;
 }
 
-bool FPulldownStructEditorUtils::IsInheritPulldownStructAsset(UStruct* InStruct)
+bool FPulldownStructEditorUtils::IsPulldownStructAsset(UStruct* InStruct)
 {
 	return IsValid(Cast<UPulldownStructAsset>(InStruct));
 }

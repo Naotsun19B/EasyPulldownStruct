@@ -17,6 +17,12 @@ void UPulldownStructAsset::PostEditChangeProperty(FPropertyChangedEvent& Propert
 		return;
 	}
 
+	// Call the original data that builds the pull-down menu changes.
+	if (PropertyChangedEvent.Property->GetFName() == GET_MEMBER_NAME_CHECKED(UPulldownStructAsset, SourceType))
+	{
+		OnSourceTypeChanged.ExecuteIfBound(this);
+	}
+
 	// Check the string for whitespace and remove it if it does.
 	if (PropertyChangedEvent.Property->GetFName() == GET_MEMBER_NAME_CHECKED(UPulldownStructAsset, SourceArray))
 	{
@@ -24,6 +30,8 @@ void UPulldownStructAsset::PostEditChangeProperty(FPropertyChangedEvent& Propert
 		{
 			Element = Element.Replace(TEXT(" "), TEXT(""));
 		}
+
+		OnSourceTypeChanged.ExecuteIfBound(this);
 	}
 
 	// Copy the content into a regular struct asset tooltip.
@@ -35,6 +43,6 @@ void UPulldownStructAsset::PostEditChangeProperty(FPropertyChangedEvent& Propert
 
 TArray<TSharedPtr<FString>> UPulldownStructAsset::GetDisplayStrings() const
 {
-	return FPulldownStructUtils::GetDisplayStringsInternal(PulldownSource, SourceDataTable, SourceStringTable, SourceArray);
+	return FPulldownStructUtils::GetDisplayStringsInternal(SourceType, SourceDataTable, SourceStringTable, SourceArray);
 }
 #endif

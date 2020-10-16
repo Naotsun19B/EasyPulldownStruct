@@ -20,36 +20,44 @@ class EASYPULLDOWNSTRUCT_API UPulldownStructAsset : public UUserDefinedStruct
 {
 	GENERATED_BODY()
 
-#if WITH_EDITORONLY_DATA
-protected:
-	// The content is copied to the Tooltip of a regular struct asset.
-	UPROPERTY(EditAnywhere, Category = "Tooltip", meta = (MultiLine = true))
-	FString Tooltip;
-
-	// Type of data that is the basis of the pull-down menu.
-	UPROPERTY(EditAnywhere, Category = "PulldownSource")
-	EPulldownSource PulldownSource;
-
-	// Data table asset from which the pull-down menu is based.
-	UPROPERTY(EditAnywhere, Category = "PulldownSource", meta = (EditCondition = "PulldownSource == EPulldownSource::PS_DataTable"))
-	UDataTable* SourceDataTable;
-
-	// String table asset from which the pull-down menu is based.
-	UPROPERTY(EditAnywhere, Category = "PulldownSource", meta = (EditCondition = "PulldownSource == EPulldownSource::PS_StringTable"))
-	UStringTable* SourceStringTable;
-
-	// An array of strings that is the basis of the pull-down menu.
-	UPROPERTY(EditAnywhere, Category = "PulldownSource", meta = (EditCondition = "PulldownSource == EPulldownSource::PS_Array"))
-	TArray<FString> SourceArray;
-#endif
-
 #if WITH_EDITOR
 public:
 	// UObject interface.
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 	// End of UObject interface.
 
+	// Get type of data that is the basis of the pull-down menu.
+	EPulldownSource GetSourceType() const { return SourceType; }
+
 	// Get the items to be displayed in the pull-down menu.
 	virtual TArray<TSharedPtr<FString>> GetDisplayStrings() const;
+#endif
+
+#if WITH_EDITORONLY_DATA
+public:
+	// An event called when the original data that builds the pull-down menu changes.
+	DECLARE_DELEGATE_OneParam(FOnSourceTypeChanged, UPulldownStructAsset* /* ChangedAsset */);
+	FOnSourceTypeChanged OnSourceTypeChanged;
+
+protected:
+	// The content is copied to the Tooltip of a regular struct asset.
+	UPROPERTY(EditAnywhere, Category = "Tooltip", meta = (MultiLine = true))
+	FString Tooltip;
+
+	// Type of data that is the basis of the pull-down menu.
+	UPROPERTY(EditAnywhere, Category = "Pulldown Source")
+	EPulldownSource SourceType = EPulldownSource::PS_DataTable;
+
+	// Data table asset from which the pull-down menu is based.
+	UPROPERTY(EditAnywhere, Category = "Pulldown Source", meta = (EditCondition = "SourceType == EPulldownSource::PS_DataTable"))
+	UDataTable* SourceDataTable = nullptr;
+
+	// String table asset from which the pull-down menu is based.
+	UPROPERTY(EditAnywhere, Category = "Pulldown Source", meta = (EditCondition = "SourceType == EPulldownSource::PS_StringTable"))
+	UStringTable* SourceStringTable = nullptr;
+
+	// An array of strings that is the basis of the pull-down menu.
+	UPROPERTY(EditAnywhere, Category = "Pulldown Source", meta = (EditCondition = "SourceType == EPulldownSource::PS_Array"))
+	TArray<FString> SourceArray;
 #endif
 };

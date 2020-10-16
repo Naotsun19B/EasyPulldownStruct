@@ -15,8 +15,8 @@ public:
 	// Recursive function that determines if a struct inherits from FPulldownStructBase.
 	static bool IsInheritPulldownStructBase(UStruct* InStruct);
 
-	// Recursive function that determines if a struct inherits from FPulldownStructAsset.
-	static bool IsInheritPulldownStructAsset(UStruct* InStruct);
+	// Recursive function that determines if a struct is UPulldownStructAsset.
+	static bool IsPulldownStructAsset(UStruct* InStruct);
 
 	// Get the data need for the pull-down menu.
 	static UPulldownData* GetPulldownData(UStruct* InStruct);

@@ -6,17 +6,15 @@
 #include "EditorSubsystem.h"
 #include "PulldownStructRegistry.generated.h"
 
+class UPulldownStructAsset;
+
 /**
- * 
+ * Manager class that collects pull-down menu structures and registers for various functions.
  */
 UCLASS()
 class EASYPULLDOWNSTRUCTED_API UPulldownStructRegistry : public UEditorSubsystem
 {
 	GENERATED_BODY()
-	
-protected:
-	UPROPERTY()
-	TArray<UStruct*> RegisteredPulldownStructs;
 
 public:
 	// Gets an instance of this subsystem.
@@ -27,12 +25,26 @@ public:
 	virtual void Deinitialize() override;
 	// End of USubsystem interface.
 
+	// Get the all structure inheriting FPulldownStructBase and UPulldownStructAsset in the project.
+	const TArray<UStruct*>& GetAllPulldownStructs() const { return RegisteredPulldownStructs; }
+
 	// Get the all structure inheriting FPulldownStructBase in the project.
-	void GetNativePulldownStructs(TArray<UStruct*>& PulldownStructs);
+	void GetNativePulldownStructs(TArray<UStruct*>& NativePulldownStructs);
 
 	// Get all UPulldownStructAsset under the content folder.
-	void GetPulldownStructAssets(TArray<UStruct*>& PulldownStructs);
+	void GetPulldownStructAssets(TArray<UPulldownStructAsset*>& PulldownStructAssets);
 
-	// Get the all structure inheriting FPulldownStructBase and UPulldownStructAsset in the project.
-	void GetAllPulldownStructs(TArray<UStruct*>& PulldownStructs);
+public:
+	// Event called when a new pull-down menu structure is added.
+	DECLARE_DELEGATE_OneParam(FOnPulldownStructRegistered, UStruct* /* RegisteredPulldownStruct */);
+	FOnPulldownStructRegistered OnPulldownStructRegistered;
+
+	// Event called when a new pull-down menu structure is removed.
+	DECLARE_DELEGATE(FOnPulldownStructUnregistered);
+	FOnPulldownStructUnregistered OnPulldownStructUnregistered;
+
+protected:
+	// List of registered pull-down menu structures.
+	UPROPERTY()
+	TArray<UStruct*> RegisteredPulldownStructs;
 };

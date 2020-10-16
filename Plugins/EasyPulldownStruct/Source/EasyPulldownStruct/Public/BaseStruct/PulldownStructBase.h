@@ -83,9 +83,16 @@ class EASYPULLDOWNSTRUCT_API UPulldownData : public UObject
 {
 	GENERATED_BODY()
 
-private:
+public:
 	friend FPulldownStructBase;
 
+	// Get type of data that is the basis of the pull-down menu.
+	EPulldownSource GetSourceType() const { return SourceType; }
+
+	// Get the items to be displayed in the pull-down menu.
+	TArray<TSharedPtr<FString>> GetDisplayStrings() const;
+
+private:
 	// Type of data that is the basis of the pull-down menu.
 	UPROPERTY()
 	EPulldownSource SourceType;
@@ -101,10 +108,6 @@ private:
 	// An array of strings that is the basis of the pull-down menu.
 	UPROPERTY()
 	TArray<FString> SourceArray;
-
-public:
-	// Get the items to be displayed in the pull-down menu.
-	TArray<TSharedPtr<FString>> GetDisplayStrings() const;
 };
 #endif
 
