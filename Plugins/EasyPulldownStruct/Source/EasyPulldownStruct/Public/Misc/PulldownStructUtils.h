@@ -7,7 +7,6 @@
 class UDataTable;
 class UStringTable;
 
-#if WITH_EDITOR
 /**
  * Type of data that is the basis of the pull-down menu.
  */
@@ -19,7 +18,6 @@ enum class EPulldownSource : uint8
 	PS_Array		UMETA(DisplayName = "Array"),
 	PS_InValid			UMETA(Hidden)
 };
-#endif
 
 #if WITH_EDITOR
 /**

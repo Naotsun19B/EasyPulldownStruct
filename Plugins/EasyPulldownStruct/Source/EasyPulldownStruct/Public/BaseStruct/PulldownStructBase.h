@@ -74,7 +74,6 @@ protected:
 #endif
 };
 
-#if WITH_EDITOR
 /**
  * A container class that summarizes the necessary data in the pull-down menu.
  */
@@ -109,7 +108,6 @@ private:
 	UPROPERTY()
 	TArray<FString> SourceArray;
 };
-#endif
 
 #if WITH_EDITOR
 /**
